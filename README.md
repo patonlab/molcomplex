@@ -6,6 +6,7 @@ A collaboration with the Sarpong group
 
 -- requirements
 - rdkit
+- dbstep
 
 # List of metrics to implement:
 
