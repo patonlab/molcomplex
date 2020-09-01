@@ -5,17 +5,29 @@ Implementing a variety of complementary metrics for molecular complexity and syn
 A collaboration with the Sarpong group
 
 -- requirements
+- numpy, pandas
 - rdkit
+- openbabel
 - dbstep
 
-# List of metrics to implement:
+# metrics implemented so far
+- Bertz Complexity (CT) Score (JACS 1981, 103, 3241-3243)
+- Balaban J Score (Chem. Phys. Lett. 1982, 89, 399-404
+- IPC: Bonchev & Trinajstic's information content of the coefficients of the characteristic polynomial of the adjacency matrix of a hydrogen-suppressed graph of a molecule (J. Chem. Phys. 1977, 67, 4517-4533)
+- Ertl SA_Score (J. Cheminform. 2009, 1, 8)
+- Boettcher Score (J. Chem. Inf. Model. 2016, 56, 3, 462–470)
 
-A few structural complexity metrics based on more theoretical approaches are:
+# currently broken
+- Kier's alpha-modified shape indices
+- Coley SCScore (J. Chem. Inf. Model. 2018, 58, 2, 252)
+
+# metrics to implement:
+
 - Bertz’s Ns and Nt index: Bertz, S. H. & Sommer, T. J. Rigorous mathematical approaches to strategic bonds and synthetic analysis based on conceptually simple new complexity indices. Chem. Commun. 16, 2409–2410 (1997).
 
 - Randić's zeta index: Randić, M. & Plavšić, D. Characterization of molecular complexity. Int. J. Quantum Chem. 91, 20–31 (2002).
 
-- Rücker's total walk count (twc) index: Rücker, G.; Rücker, C. Counts of All Walks as Atomic and Molecular Descriptors. J. Chem. Inf. Comput. Sci. 1993, 33, 683-695. 
+- Rücker's total walk count (twc) index: Rücker, G.; Rücker, C. Counts of All Walks as Atomic and Molecular Descriptors. J. Chem. Inf. Comput. Sci. 1993, 33, 683-695.
 
 - Proudfoot's Cm index based on atom environments: Proudfoot, J. R. A path based approach to assessing molecular complexity. Bioorganic Med. Chem. Lett. 27, 2014–2017 (2017).
 

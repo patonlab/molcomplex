@@ -9,9 +9,8 @@ SUPPORTED_EXTENSIONS = set(('.smi','.txt'))
 from glob import glob
 from argparse import ArgumentParser
 import numpy as np
-import scipy as sp
 import pandas as pd
-import os, sklearn, sys
+import os, sys
 from openbabel import openbabel
 
 # rdkit
@@ -40,6 +39,43 @@ def get_bertz_score(mols):
 
         bertz_scores.append(score)
     return bertz_scores
+
+# Balaban J Score (Chem. Phys. Lett. 1982, 89, 399-404
+def get_balaban_score(mols):
+    balaban_scores = []
+    for i, mol in enumerate(mols):
+        try:
+            score = graph.BalabanJ(mol)
+        except:
+             score = np.nan
+
+        balaban_scores.append(score)
+    return balaban_scores
+
+# Kier's alpha-modified shape indices
+def get_hallkieralpha_score(mols):
+    hkalpha_scores = []
+    for i, mol in enumerate(mols):
+        try:
+            score = graph.HallKierAlpha(mol)
+        except:
+             score = np.nan
+
+        hkalpha_scores.append(score)
+    return hkalpha_scores
+
+#  Bonchev & Trinajstic's information content of the coefficients of the characteristic
+# polynomial of the adjacency matrix of a hydrogen-suppressed graph of a molecule (J. Chem. Phys. 1977, 67, 4517-4533)
+def get_ipc_score(mols):
+    IPC_scores = []
+    for i, mol in enumerate(mols):
+        try:
+            score = graph.Ipc(mol)
+        except:
+             score = np.nan
+
+        IPC_scores.append(score)
+    return IPC_scores
 
 # Ertl SA_Score (J. Cheminform. 2009, 1, 8)
 def get_sa_score(mols):
@@ -115,15 +151,15 @@ def main():
 
         for line in smifile:
             toks = line.split()
-            smi = toks[0]
+            if len(toks) != 0:
+                smi = toks[0]
+                pieces = smi.split('.')
+                if len(pieces) > 1:
+                    smi = max(pieces, key=len) #take largest component by length
+                    print("Taking largest component: %s\t%s" % (smi,name))
 
-            pieces = smi.split('.')
-            if len(pieces) > 1:
-                smi = max(pieces, key=len) #take largest component by length
-                print("Taking largest component: %s\t%s" % (smi,name))
-
-            # append all smiles to the mol_smiles list
-            mol_smiles.append(smi)
+                # append all smiles to the mol_smiles list
+                mol_smiles.append(smi)
 
     # create a dataframe with a smiles column; the metrics will be added as new columns
     MOL_DATA = pd.DataFrame(mol_smiles, columns=['SMILES'])
@@ -133,11 +169,14 @@ def main():
     if options.addH == True: mol_objects = [Chem.AddHs(mol) for mol in mol_objects]
 
     # obtain compexity scores for the entire list
-    MOL_DATA['SAS'] = get_sa_score(mol_objects)
+    MOL_DATA['BALABAN'] = get_balaban_score(mol_objects)
     MOL_DATA['BERTZ'] = get_bertz_score(mol_objects)
     MOL_DATA['BOETTCHER'] = get_boettcher_score(mol_smiles)
-    #MOL_DATA['SCS'] = get_scscore(mol_smiles)
+    MOL_DATA['HKALPHA'] = get_hallkieralpha_score(mol_objects)
+    MOL_DATA['IPC'] = get_ipc_score(mol_objects)
+    MOL_DATA['SAS'] = get_sa_score(mol_objects)
 
+    #MOL_DATA['SCS'] = get_scscore(mol_smiles)
 
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
         print(MOL_DATA)
