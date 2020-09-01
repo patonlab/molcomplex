@@ -31,6 +31,8 @@ A collaboration with the Sarpong group
 
 - Proudfoot's Cm index based on atom environments: Proudfoot, J. R. A path based approach to assessing molecular complexity. Bioorganic Med. Chem. Lett. 27, 2014–2017 (2017).
 
+- https://www.nature.com/articles/s41598-018-37253-8
+
 Two noteworthy substructure-based methods are:
 - Barone, R. & Chanon, M. A new and simple approach to chemical complexity. Application to the synthesis of natural products. J. Chem. Inf. Comput. Sci. 41, 269–272 (2001).
 
