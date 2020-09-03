@@ -53,7 +53,7 @@ def SP3CARBONS_CHIRAL_ALLCARBON_RATIO(mol):
 
 def SP3CARBONS_CHIRAL_COUNT(mol):
     c_chiral = 0
-    chiralcenters = Chem.FindMolChiralCenters(mol)
+    chiralcenters = Chem.FindMolChiralCenters(mol,includeUnassigned=True)
     for list in chiralcenters:
         if mol.GetAtomWithIdx(list[0]).GetSymbol() = 'C':
             c_chiral += 1
@@ -116,44 +116,70 @@ def SP3CARBONS_CSP_ALLCARBON_RATIO(mol):
     numcar  = SP3CARBONS_TOTALCARBON_COUNT(mol)
     return numcsp/numcar
 
+''' general rdkit descriptors  - rings information'''
+
+def RINGINFO_NUM_ALI_CARBOCYCLE(mol):
+    return Chem.rdMolDescriptors.CalcNumAliphaticCarbocycles(mol)
+
+def RINGINFO_NUM_ALI_HETEROCYCLE(mol):
+    return Chem.rdMolDescriptors.CalcNumAliphaticHeterocycles(mol)
+
+def RINGINFO_NUM_ALI_RINGS(mol):
+    return Chem.rdMolDescriptors.CalcNumAliphaticRings(mol)
+
+def RINGINFO_NUM_ARO_CARBOCYCLE(mol):
+    return Chem.rdMolDescriptors.CalcNumAromaticCarbocycles(mol)
+
+def RINGINFO_NUM_ARO_HETEROCYCLE(mol):
+    return Chem.rdMolDescriptors.CalcNumAromaticHeterocycles(mol)
+
+def RINGINFO_NUM_ARO_RINGS(mol):
+    return Chem.rdMolDescriptors.CalcNumAromaticRings(mol)
+
+def RINGINFO_NUM_BRIDGE_ATOMS(mol):
+    return Chem.rdMolDescriptors.CalcNumBridgeheadAtoms(mol)
+
+def RINGINFO_NUM_SPIRO_ATOMS(mol):
+    return Chem.rdMolDescriptors.CalcNumSpiroAtoms(mol)
+
 
 ''' Taken from pubchem descriptors '''
 
-def XLOGP(mol):
+def PUBCHEM_XLOGP(mol):
     return Chem.rdMolDescriptors.CalcCrippenDescriptors(mol)[0]
 
-def TPSA(mol):
+def PUBCHEM_TPSA(mol):
     return Chem.rdMolDescriptors.CalcTPSA(mol)
 
-def H_BOND_DONOR_COUNT(mol):
+def PUBCHEM_H_BOND_DONOR_COUNT(mol):
     return Chem.rdMolDescriptors.CalcNumHBD(mol)
 
-def H_BOND_ACCEPTOR_COUNT(mol):
+def PUBCHEM_H_BOND_ACCEPTOR_COUNT(mol):
     return Chem.rdMolDescriptors.CalcNumHBA(mol)
 
-def ROTATABLE_BOND_COUNT(mol):
+def PUBCHEM_ROTATABLE_BOND_COUNT(mol):
     return Chem.rdMolDescriptors.CalcNumRotatableBonds(mol,strict=1)
 
-def HEAVY_ATOM_COUNT(mol):
+def PUBCHEM_HEAVY_ATOM_COUNT(mol):
     return Chem.Lipinski.HeavyAtomCount(mol)
 
-def ATOM_STEREO_COUNT(mol):
+def PUBCHEM_ATOM_STEREO_COUNT(mol):
     return Chem.rdMolDescriptors.CalcNumAtomStereoCenters(mol)
 
-def DEFINED_ATOM_STEREO_COUNT(mol):
+def PUBCHEM_DEFINED_ATOM_STEREO_COUNT(mol):
     return ATOM_STEREO_COUNT(mol) - UNDEFINED_ATOM_STEREO_COUNT(mol)
 
-def UNDEFINED_ATOM_STEREO_COUNT(mol):
+def PUBCHEM_UNDEFINED_ATOM_STEREO_COUNT(mol):
     return Chem.rdMolDescriptors.CalcNumUnspecifiedAtomStereoCenters(mol)
 
-def BOND_STEREO_COUNT(mol):
+def PUBCHEM_BOND_STEREO_COUNT(mol):
     return 0
 
-def DEFINED_BOND_STEREO_COUNT(mol):
+def PUBCHEM_DEFINED_BOND_STEREO_COUNT(mol):
     return 0
 
-def UNDEFINED_ATOM_STEREO_COUNT(mol):
+def PUBCHEM_UNDEFINED_ATOM_STEREO_COUNT(mol):
     return 0
 
-def COVALENT_UNIT_COUNT(mol):
+def PUBCHEM_COVALENT_UNIT_COUNT(mol):
     return 0
