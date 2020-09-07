@@ -1,22 +1,56 @@
+#!/usr/bin/env python
+
+#####################################################.
+# 		   This file stores all the functions 	    #
+# 	        used for genrating a descriptors     	#
+#####################################################.
+
 import rdkit
 from rdkit import Chem
+from rdkit.Chem.AtomPairs import Pairs,Torsions
 from openbabel import openbabel
+
+
 
 
 ''' Taken from Merck Paper descriptors '''
 
 ''' 1. Descriptor complex - AP and TT '''
-def DESCRIPTORCOMPLEXITY_APCOMPLEX(mol):
-    return 0
-
-def DESCRIPTORCOMPLEXITY_TTCOMPLEX(mol):
-    return 0
-
 def DESCRIPTORCOMPLEXITY_UNIQUEAP(mol):
-    return 0
+    mol_noH = Chem.RemoveHs(mol)
+    mol_ap_fp = Pairs.GetAtomPairFingerprint(mol_noHs)
+    num_uniq_ap = len(mol_ap_fp.GetNonzeroElements())
+    return num_uniq_ap
+
 
 def DESCRIPTORCOMPLEXITY_UNIQUETT(mol):
+    # need ti check as the example from merck as 19 unique but actual unique is 13.
+    mol_noH = Chem.RemoveHs(mol)
+    mol_tt_fp = Torsions.GetTopologicalTorsionFingerprint(mol_noHs)
+    num_uniq_tt = len(mol_tt_fp.GetNonzeroElements())
+    return num_uniq_tt
+
+def DESCRIPTORCOMPLEXITY_TOTALAP(mol):
+    mol_noH = Chem.RemoveHs(mol)
+    num_noHs = mol_noH.GetNumAtoms()
+    num_tot_AP = (num_noHs*(num_noHs - 1))/2
+    return num_tot_AP
+
+def DESCRIPTORCOMPLEXITY_TOTALTT(mol):
+    #need to find a wways to get total TT
     return 0
+
+def DESCRIPTORCOMPLEXITY_APCOMPLEX(mol):
+    num_uniq = DESCRIPTORCOMPLEXITY_UNIQUEAP(mol)
+    num_tot = DESCRIPTORCOMPLEXITY_TOTALAP(mol)
+    return num_uniq/num_tot
+
+def DESCRIPTORCOMPLEXITY_TTCOMPLEX(mol):
+    num_uniq = DESCRIPTORCOMPLEXITY_UNIQUETT(mol)
+    num_tot = DESCRIPTORCOMPLEXITY_TOTALTT(mol)
+    return num_uniq/num_tot
+
+
 
 ''' 2. MOE_2D '''
 
