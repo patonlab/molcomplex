@@ -10,9 +10,6 @@ from rdkit import Chem
 from rdkit.Chem.AtomPairs import Pairs,Torsions
 from openbabel import openbabel
 
-
-
-
 ''' Taken from Merck Paper descriptors '''
 
 ''' 1. Descriptor complex - AP and TT '''
@@ -49,7 +46,6 @@ def DESCRIPTORCOMPLEXITY_TTCOMPLEX(mol):
     num_uniq = DESCRIPTORCOMPLEXITY_UNIQUETT(mol)
     num_tot = DESCRIPTORCOMPLEXITY_TOTALTT(mol)
     return num_uniq/num_tot
-
 
 
 ''' 2. MOE_2D '''
@@ -175,6 +171,17 @@ def RINGINFO_NUM_BRIDGE_ATOMS(mol):
 
 def RINGINFO_NUM_SPIRO_ATOMS(mol):
     return Chem.rdMolDescriptors.CalcNumSpiroAtoms(mol)
+
+''' RDKit descriptors - present '''
+
+def wiener_index(mol):
+    res = 0
+    amat = Chem.GetDistanceMatrix(mol)
+    num_atoms = m.GetNumAtoms()
+    for i in range(num_atoms):
+        for j in range(i+1,num_atoms):
+            res += amat[i][j]
+    return res
 
 
 ''' Taken from pubchem descriptors '''
