@@ -174,7 +174,7 @@ def RINGINFO_NUM_SPIRO_ATOMS(mol):
 
 ''' RDKit descriptors - present '''
 
-def wiener_index(mol):
+def WIENER_INDEX(mol):
     res = 0
     amat = Chem.GetDistanceMatrix(mol)
     num_atoms = m.GetNumAtoms()
@@ -182,6 +182,9 @@ def wiener_index(mol):
         for j in range(i+1,num_atoms):
             res += amat[i][j]
     return res
+
+def SMILES_3_2(smi):
+    return len(smi)**(3/2)
 
 
 ''' Taken from pubchem descriptors '''
