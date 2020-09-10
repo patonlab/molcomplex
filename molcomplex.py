@@ -67,8 +67,7 @@ def main():
     MOL_DATA['HKALPHA'] = get_hallkieralpha_score(mol_objects)
     MOL_DATA['IPC'] = get_ipc_score(mol_objects)
     MOL_DATA['SAS'] = get_sa_score(mol_objects)
-
-    #MOL_DATA['SCS'] = get_scscore(mol_smiles)
+    MOL_DATA['SCS'] = get_scscore(mol_smiles)
 
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
         print(MOL_DATA)
