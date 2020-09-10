@@ -9,6 +9,8 @@ import rdkit
 from rdkit import Chem
 from rdkit.Chem.AtomPairs import Pairs,Torsions
 from openbabel import openbabel
+import dbstep.Dbstep as db
+
 
 ''' Taken from Merck Paper descriptors '''
 
@@ -227,3 +229,10 @@ def PUBCHEM_UNDEFINED_ATOM_STEREO_COUNT(mol):
 
 def PUBCHEM_COVALENT_UNIT_COUNT(mol):
     return 0
+
+
+''' DBSTEP descriptors '''
+
+def MOL_VOLUME(mol):
+    mol = db.dbstep(mol, commandline=True)
+    return mol.occ_vol
