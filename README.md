@@ -9,6 +9,7 @@ A collaboration with the Sarpong group
 - rdkit
 - openbabel
 - dbstep
+- modred
 
 # metrics implemented so far
 - Bertz Complexity (CT) Score (JACS 1981, 103, 3241-3243)
