@@ -11,6 +11,9 @@ A collaboration with the Sarpong group
 - dbstep
 - modred
 
+# to do list
+- output dataframe as CSV
+
 # metrics implemented so far
 - Bertz Complexity (CT) Score (JACS 1981, 103, 3241-3243)
 - Balaban J Score (Chem. Phys. Lett. 1982, 89, 399-404
