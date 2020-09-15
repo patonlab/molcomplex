@@ -21,6 +21,10 @@ A collaboration with the Sarpong group
 - Ertl SA_Score (J. Cheminform. 2009, 1, 8)
 - Boettcher Score (J. Chem. Inf. Model. 2016, 56, 3, 462–470)
 
+- Rücker's total walk count (twc) index: Rücker, G.; Rücker, C. Counts of All Walks as Atomic and Molecular Descriptors. J. Chem. Inf. Comput. Sci. 1993, 33, 683-695.
+
+- Proudfoot's Cm index based on atom environments: Proudfoot, J. R. A path based approach to assessing molecular complexity. Bioorganic Med. Chem. Lett. 27, 2014–2017 (2017).
+
 # currently broken
 - Kier's alpha-modified shape indices
 - Coley SCScore (J. Chem. Inf. Model. 2018, 58, 2, 252)
@@ -31,9 +35,6 @@ A collaboration with the Sarpong group
 
 - Randić's zeta index: Randić, M. & Plavšić, D. Characterization of molecular complexity. Int. J. Quantum Chem. 91, 20–31 (2002).
 
-- Rücker's total walk count (twc) index: Rücker, G.; Rücker, C. Counts of All Walks as Atomic and Molecular Descriptors. J. Chem. Inf. Comput. Sci. 1993, 33, 683-695.
-
-- Proudfoot's Cm index based on atom environments: Proudfoot, J. R. A path based approach to assessing molecular complexity. Bioorganic Med. Chem. Lett. 27, 2014–2017 (2017).
 
 - https://www.nature.com/articles/s41598-018-37253-8
 
