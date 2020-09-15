@@ -9,6 +9,7 @@ import rdkit
 from rdkit import Chem
 from rdkit.Chem.AtomPairs import Pairs,Torsions
 from openbabel import openbabel
+from mordred import CPSA, KappaShapeIndex, McGowanVolume, MoeType, VdwVolumeABC, ZagrebIndex
 import dbstep.Dbstep as db
 
 
@@ -87,7 +88,7 @@ def SP3CARBONS_CHIRAL_COUNT(mol):
     c_chiral = 0
     chiralcenters = Chem.FindMolChiralCenters(mol,includeUnassigned=True)
     for list in chiralcenters:
-        if mol.GetAtomWithIdx(list[0]).GetSymbol() = 'C':
+        if mol.GetAtomWithIdx(list[0]).GetSymbol() == 'C':
             c_chiral += 1
     return c_chiral
 
@@ -230,9 +231,58 @@ def PUBCHEM_UNDEFINED_ATOM_STEREO_COUNT(mol):
 def PUBCHEM_COVALENT_UNIT_COUNT(mol):
     return 0
 
+''' Mordred provided descriptors '''
+    
+def KAPPA_SHAPE_INDEX1(mol):
+    """Defined on page 9 of https://www.epa.gov/sites/production/files/2015-05/documents/moleculardescriptorsguide-v102.pdf"""
+    ksi1 = KappaShapeIndex.KappaShapeIndex1()
+    return ksi1(mol)
+    
+def KAPPA_SHAPE_INDEX2(mol):
+    ksi2 = KappaShapeIndex.KappaShapeIndex2()
+    return ksi2(mol)
+    
+def KAPPA_SHAPE_INDEX3(mol):
+    ksi3 = KappaShapeIndex.KappaShapeIndex3()
+    return ksi3(mol)
+    
+def MCGOWAN_VOLUME(mol):
+    mv = McGowanVolume.McGowanVolume()
+    return mv(mol)
+    
+def MOE_TYPE_Labute_ASA(mol):
+    lasa = MoeType.LabuteASA()
+    return lasa(mol)
+    
+def MOE_TYPE_PEOE_VSA(mol):
+    pvsa = MoeType.PEOE_VSA()
+    return pvsa(mol)
+    
+def MOE_TYPE_SMR_VSA(mol):
+    svsa = MoeType.SMR_VSA()
+    return svsa(mol)  
 
+def MOE_TYPE_SLOGP_VSA(mol):
+    slpvsa = MoeType.SlogP_VSA()
+    return slpvsa(mol) 
+    
+def MOE_TYPE_ESTATE_VSA(mol):
+    esvsa = MoeType.EState_VSA()
+    return esvsa(mol) 
+
+def VDW_VOLUME_ABC(mol):
+    vvabc = VdwVolumeABC.VdwVolumeABC()
+    return vvabc(mol)
+    
+def ZAGREB_INDEX(mol):
+    zi = ZagrebIndex.ZagrebIndex()
+    return zi(mol)
+
+    
 ''' DBSTEP descriptors '''
 
 def MOL_VOLUME(mol):
     mol = db.dbstep(mol, commandline=True)
     return mol.occ_vol
+    
+    

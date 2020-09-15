@@ -1,0 +1,5 @@
+*.pyc
+.cache/
+.DS_Store
+dist/
+build/
