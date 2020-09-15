@@ -19,7 +19,6 @@ def calc_ca(num_uni_detail_list_1,num_uni_detail_list_2,total_all_details):
     ca += np.log2(total_all_details)
     return ca
 
-
 def calc_cm_star(ca_all):
     sum = 0
     for ca in ca_all:
@@ -35,55 +34,37 @@ def proudfoot_index(mol):
 
         type_list_1, type_list_2 = [], []
         if mol.GetAtomWithIdx(root_atom).GetSymbol() != 'H':
-
-            print('atom', mol.GetAtomWithIdx(root_atom).GetSymbol())
-            print('atom index',root_atom)
-
+            #getting all paths of lengrth 1 and 2
             num_bonds_1 = Chem.rdmolops.FindAllPathsOfLengthN(mol,1,rootedAtAtom=root_atom,useHs=True)
             num_bonds_2 = Chem.rdmolops.FindAllPathsOfLengthN(mol,2,rootedAtAtom=root_atom,useHs=True)
 
             len_num_bonds_1 = len(list(num_bonds_1))
-    #         print('first len_num_bonds_1',len_num_bonds_1)
 
+            #only taking Hydrogen for path length 1 and making a list of bond indexes for path length 1 and 2
             final_1_bond, final_2_bond = [],[]
             for i,bond_1 in enumerate(reversed(num_bonds_1)):
 
                 bond = list(bond_1)[0]
                 atom_1 = mol.GetBondWithIdx(bond).GetBeginAtomIdx()
                 atom_2 = mol.GetBondWithIdx(bond).GetEndAtomIdx()
-    #             print(mol.GetAtomWithIdx(atom_1).GetSymbol(),mol.GetAtomWithIdx(atom_2).GetSymbol())
                 if atom_1 == root_atom:
                     atom_remove = atom_2
                 if atom_2 == root_atom:
                     atom_remove = atom_1
 
                 if mol.GetAtomWithIdx(atom_remove).GetSymbol() != 'H':
-    #                 print('remove',mol.GetAtomWithIdx(atom_remove).GetSymbol())
                     len_num_bonds_1 -= 1
-    #                 print('reduce len_num_bonds_1',len_num_bonds_1)
-
                 else:
                     final_1_bond.append(bond)
 
             for i,bond_2 in enumerate(reversed(num_bonds_2)):
                 final_2_bond.append(list(bond_2))
 
-
-
-    #             print('final-1',len_num_bonds_1)
-
             len_num_bonds_2 = len(list(num_bonds_2))
-    #             print('final-2',len_num_bonds_2)
 
             total_for_each_atom = len_num_bonds_1 + len_num_bonds_2
-    #             print('final-2',len_num_bonds_2)
-
-    #             print(final_1_bond)
-    #             print(final_2_bond)
 
             #assigning the atom descriptions for each bond bond distance 1
-
-
             for each_1 in final_1_bond:
                 atom_1_no = mol.GetBondWithIdx(bond).GetBeginAtomIdx()
                 atom_2_no = mol.GetBondWithIdx(bond).GetEndAtomIdx()
@@ -110,10 +91,8 @@ def proudfoot_index(mol):
 
                 all_detail_list_1.append([atom_1_atom_num,atom_1_tot_connection,atom_1_exp_non_H_connection, atom_2_atom_num,atom_2_tot_connection,atom_2_exp_non_H_connection])
 
-    #             print(all_detail_list_1)
 
-             #assigning the atom descriptions for each bond distance 2
-
+            #assigning the atom descriptions for each bond distance 2
             for each_2 in final_2_bond:
                 atom_1_no = mol.GetBondWithIdx(each_2[0]).GetBeginAtomIdx()
                 atom_2_no = mol.GetBondWithIdx(each_2[0]).GetEndAtomIdx()
@@ -164,7 +143,6 @@ def proudfoot_index(mol):
 
                 all_detail_list_2.append([atom_1_atom_num,atom_1_tot_connection,atom_1_exp_non_H_connection, atom_2_atom_num,atom_2_tot_connection,atom_2_exp_non_H_connection, atom_3_atom_num,atom_3_tot_connection,atom_3_exp_non_H_connection])
 
-    #             print(all_detail_list_2)
 
             total_all_details = len(all_detail_list_1) + len(all_detail_list_2)
 
@@ -190,13 +168,7 @@ def proudfoot_index(mol):
                     uni_detail_list_2.append(list_2)
                     num_uni_detail_list_2.append([list_2,1])
 
-    #             print('uni1',num_uni_detail_list_1)
-    #             print('uni2',num_uni_detail_list_2)
-
             ca = calc_ca( num_uni_detail_list_1, num_uni_detail_list_2, total_all_details)
-
-            print(ca)
-            print('---------------')
 
             ca_all.append(ca)
 
