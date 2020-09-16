@@ -15,15 +15,16 @@ A collaboration with the Sarpong group
 - output dataframe as CSV
 
 # metrics implemented
-- Bertz Complexity (CT) Score (JACS 1981, 103, 3241-3243).
-- Balaban J Score (Chem. Phys. Lett. 1982, 89, 399-404).
-- IPC: Bonchev & Trinajstic's information content of the coefficients of the characteristic polynomial of the adjacency matrix of a hydrogen-suppressed graph of a molecule (J. Chem. Phys. 1977, 67, 4517-4533).
-- Ertl SA_Score (J. Cheminform. 2009, 1, 8).
-- Boettcher Score (J. Chem. Inf. Model. 2016, 56, 3, 462–470).
-- Rücker's total walk count (twc) index: Rücker, G.; Rücker, C. Counts of All Walks as Atomic and Molecular Descriptors. (J. Chem. Inf. Comput. Sci. 1993, 33, 683-695).
-- Proudfoot's Cm index based on atom environments: Proudfoot, J. R. A path based approach to assessing molecular complexity. Bioorganic Med. Chem. Lett. 27, 2014–2017 (2017).
-- Kappa Shape Indices 1, 2 & 3 (Quant. Struct. Act. Relat. 1986, 5, 1-7).
-- McGowan Volume (Chromatographia, 1987, 23, 243-246).
+- Bertz Complexity (CT) Score (JACS 1981, 103, 3241-3243)
+- Balaban J Score (Chem. Phys. Lett. 1982, 89, 399-404)
+- Coley SCScore (J. Chem. Inf. Model. 2018, 58, 2, 252)
+- IPC: Bonchev & Trinajstic's information content of the coefficients of the characteristic polynomial of the adjacency matrix of a hydrogen-suppressed graph of a molecule (J. Chem. Phys. 1977, 67, 4517-4533)
+- Ertl SA_Score (J. Cheminform. 2009, 1, 8)
+- Boettcher Score (J. Chem. Inf. Model. 2016, 56, 3, 462–470)
+- Rücker's total walk count (twc) index: Rücker, G.; Rücker, C. Counts of All Walks as Atomic and Molecular Descriptors. (J. Chem. Inf. Comput. Sci. 1993, 33, 683-695)
+- Proudfoot's Cm index based on atom environments: Proudfoot, J. R. A path based approach to assessing molecular complexity. Bioorganic Med. Chem. Lett. 27, 2014–2017 (2017)
+- Kappa Shape Indices 1, 2 & 3 (Quant. Struct. Act. Relat. 1986, 5, 1-7)
+- McGowan Volume (Chromatographia, 1987, 23, 243-246)
 - Labute Approximate Surface Area
 - Van der Waals Volume Atomic and Bond Contributions (J. Org. Chem. 2003, 68, 7368-7373).
 - Zagreb Index 
@@ -32,7 +33,6 @@ A collaboration with the Sarpong group
 
 # currently broken
 - Kier's alpha-modified shape indices
-- Coley SCScore (J. Chem. Inf. Model. 2018, 58, 2, 252)
 
 # metrics to implement:
 
