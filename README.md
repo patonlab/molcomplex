@@ -25,7 +25,7 @@ A collaboration with the Sarpong group
 - Proudfoot's Cm index based on atom environments: Proudfoot, J. R. A path based approach to assessing molecular complexity. Bioorganic Med. Chem. Lett. 27, 2014–2017 (2017)
 - Kappa Shape Indices 1, 2 & 3 (Quant. Struct. Act. Relat. 1986, 5, 1-7)
 - McGowan Volume (Chromatographia, 1987, 23, 243-246)
-- Labute Approximate Surface Area
+- Labute Approximate Surface Area (Methods Mol Biol 2004, 275, 261-78)
 - Van der Waals Volume Atomic and Bond Contributions (J. Org. Chem. 2003, 68, 7368-7373).
 - Zagreb Index 
 - MOE Type Desciptors (Labute ASA, PEOE VSA, SMR VSA, SLogP VSA)
