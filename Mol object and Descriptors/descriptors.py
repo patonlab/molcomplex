@@ -17,7 +17,7 @@ import dbstep.Dbstep as db
 
 ''' 1. Descriptor complex - AP and TT '''
 def DESCRIPTORCOMPLEXITY_UNIQUEAP(mol):
-    mol_noH = Chem.RemoveHs(mol)
+    mol_noHs = Chem.RemoveHs(mol)
     mol_ap_fp = Pairs.GetAtomPairFingerprint(mol_noHs)
     num_uniq_ap = len(mol_ap_fp.GetNonzeroElements())
     return num_uniq_ap
@@ -25,14 +25,14 @@ def DESCRIPTORCOMPLEXITY_UNIQUEAP(mol):
 
 def DESCRIPTORCOMPLEXITY_UNIQUETT(mol):
     # need ti check as the example from merck as 19 unique but actual unique is 13.
-    mol_noH = Chem.RemoveHs(mol)
+    mol_noHs = Chem.RemoveHs(mol)
     mol_tt_fp = Torsions.GetTopologicalTorsionFingerprint(mol_noHs)
     num_uniq_tt = len(mol_tt_fp.GetNonzeroElements())
     return num_uniq_tt
 
 def DESCRIPTORCOMPLEXITY_TOTALAP(mol):
-    mol_noH = Chem.RemoveHs(mol)
-    num_noHs = mol_noH.GetNumAtoms()
+    mol_noHs = Chem.RemoveHs(mol)
+    num_noHs = mol_noHs.GetNumAtoms()
     num_tot_AP = (num_noHs*(num_noHs - 1))/2
     return num_tot_AP
 
@@ -43,13 +43,14 @@ def DESCRIPTORCOMPLEXITY_TOTALTT(mol):
 def DESCRIPTORCOMPLEXITY_APCOMPLEX(mol):
     num_uniq = DESCRIPTORCOMPLEXITY_UNIQUEAP(mol)
     num_tot = DESCRIPTORCOMPLEXITY_TOTALAP(mol)
-    return num_uniq/num_tot
+    if num_tot == 0: return 0
+    else: return num_uniq/num_tot
 
 def DESCRIPTORCOMPLEXITY_TTCOMPLEX(mol):
     num_uniq = DESCRIPTORCOMPLEXITY_UNIQUETT(mol)
     num_tot = DESCRIPTORCOMPLEXITY_TOTALTT(mol)
-    return num_uniq/num_tot
-
+    if num_tot == 0: return 0
+    else: return num_uniq/num_tot
 
 ''' 2. MOE_2D '''
 
@@ -81,7 +82,7 @@ def SP3CARBONS_CHIRAL_ALLATOM_RATIO(mol):
 
 def SP3CARBONS_CHIRAL_ALLCARBON_RATIO(mol):
     numchiral = SP3CARBONS_CHIRAL_COUNT(mol)
-    numcarbons  = SP3CARBONS_CAR_COUNT(mol)
+    numcarbons  = SP3CARBONS_TOTALCARBON_COUNT(mol)
     return numchiral/numcarbons
 
 def SP3CARBONS_CHIRAL_COUNT(mol):
@@ -180,7 +181,7 @@ def RINGINFO_NUM_SPIRO_ATOMS(mol):
 def WIENER_INDEX(mol):
     res = 0
     amat = Chem.GetDistanceMatrix(mol)
-    num_atoms = m.GetNumAtoms()
+    num_atoms = mol.GetNumAtoms()
     for i in range(num_atoms):
         for j in range(i+1,num_atoms):
             res += amat[i][j]
@@ -214,7 +215,7 @@ def PUBCHEM_ATOM_STEREO_COUNT(mol):
     return Chem.rdMolDescriptors.CalcNumAtomStereoCenters(mol)
 
 def PUBCHEM_DEFINED_ATOM_STEREO_COUNT(mol):
-    return ATOM_STEREO_COUNT(mol) - UNDEFINED_ATOM_STEREO_COUNT(mol)
+    return PUBCHEM_ATOM_STEREO_COUNT(mol) - PUBCHEM_UNDEFINED_ATOM_STEREO_COUNT(mol)
 
 def PUBCHEM_UNDEFINED_ATOM_STEREO_COUNT(mol):
     return Chem.rdMolDescriptors.CalcNumUnspecifiedAtomStereoCenters(mol)
@@ -279,10 +280,9 @@ def ZAGREB_INDEX(mol):
     return zi(mol)
 
     
-''' DBSTEP descriptors '''
+''' DBSTEP descriptors - need 3d Coords'''
 
 def MOL_VOLUME(mol):
-    mol = db.dbstep(mol, commandline=True)
-    return mol.occ_vol
-    
+    sterics = db.dbstep(mol, commandline=True)
+    return sterics.occ_vol
     
