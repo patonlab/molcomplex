@@ -11,7 +11,6 @@ from openbabel import openbabel
 import os
 
 # rdkit
-import rdkit
 from rdkit import Chem
 import rdkit.Chem.GraphDescriptors as graph
 

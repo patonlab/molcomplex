@@ -6,7 +6,6 @@
 #####################################################.
 
 import os
-import rdkit
 import numpy as np
 
 from rdkit import Chem
@@ -14,7 +13,7 @@ from rdkit.Chem.AtomPairs import Pairs,Torsions
 import rdkit.Chem.GraphDescriptors as graph
 from openbabel import openbabel
 from mordred import CPSA, KappaShapeIndex, McGowanVolume, MoeType, VdwVolumeABC, ZagrebIndex
-import dbstep.Dbstep as db
+#import dbstep.Dbstep as db
 
 # external complexity metrics
 try:
@@ -599,7 +598,7 @@ def PUBCHEM_UNDEFINED_ATOM_STEREO_COUNT(mols):
 			uasc = Chem.rdMolDescriptors.CalcNumUnspecifiedAtomStereoCenters(mol)
 		except:
 			uasc = np.nan
-		uasc_list_list.append(uasc_list)
+		uasc_list.append(uasc)
 	return uasc_list
 
 def PUBCHEM_BOND_STEREO_COUNT(mols):

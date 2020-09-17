@@ -12,8 +12,6 @@ from glob import glob
 import numpy as np
 import pandas as pd
 import os, sys, time
-from concurrent import futures
-max_workers = 2
 
 from molcomplex_functions import *
 from complex_object import *

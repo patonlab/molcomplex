@@ -1,5 +1,4 @@
 # rdkit
-import rdkit
 from rdkit import Chem
 from rdkit.Chem import Descriptors, rdMolDescriptors
 from pandas import DataFrame
@@ -107,7 +106,6 @@ if __name__ == "__main__":
 
     #just for testing the class is working
     smi = 'CCCC'
-    dict={'SMILES':smi}
     mol_object = mol_complex([smi])
     print('SMILES',mol_object.SMILES[0])
     print('MOLFromSMILES',mol_object.mol)
