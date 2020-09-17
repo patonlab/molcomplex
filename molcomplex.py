@@ -11,17 +11,21 @@ from glob import glob
 
 import numpy as np
 import pandas as pd
-import os, sys
+import os, sys, time
+from concurrent import futures
+max_workers = 2
 
 from molcomplex_functions import *
+from complex_object import *
 
 def main():
-
+    start = time.time()
     # Get command line inputs. Use -h to list all possible arguments and default values
     parser = ArgumentParser()
-    parser.add_argument("-addH", dest="addH", action="store_true", default=False,
+    parser.add_argument("--addH", dest="addH", action="store_true", default=False,
                         help="Add H atoms to all structures before computing complexity score")
-
+    parser.add_argument("--csv", dest="csv", action="store_true", default=False,
+                        help="Export data to .CSV formatted file")
     # Parse Arguments
     (options, args) = parser.parse_known_args()
 
@@ -52,25 +56,17 @@ def main():
 
                 # append all smiles to the mol_smiles list
                 mol_smiles.append(smi)
-
-    # create a dataframe with a smiles column; the metrics will be added as new columns
-    MOL_DATA = pd.DataFrame(mol_smiles, columns=['SMILES'])
-
-    # create a list of rdkit mol objects (required for some metrics)
-    mol_objects = [Chem.MolFromSmiles(smi) for smi in mol_smiles]
-    if options.addH == True: mol_objects = [Chem.AddHs(mol) for mol in mol_objects]
-
-    # obtain compexity scores for the entire list
-    MOL_DATA['BALABAN'] = get_balaban_score(mol_objects)
-    MOL_DATA['BERTZ'] = get_bertz_score(mol_objects)
-    MOL_DATA['BOETTCHER'] = get_boettcher_score(mol_smiles)
-    MOL_DATA['HKALPHA'] = get_hallkieralpha_score(mol_objects)
-    MOL_DATA['IPC'] = get_ipc_score(mol_objects)
-    MOL_DATA['SAS'] = get_sa_score(mol_objects)
-    MOL_DATA['SCS'] = get_scscore(mol_smiles)
+    
+    MOL_DATA = mol_complex(mol_smiles)
 
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
         print(MOL_DATA)
-
+    total_time = time.time() - start
+    
+    print("Num Descriptors: ",len(MOL_DATA.columns) - 1)
+    print("Total Time: ",total_time)
+    if options.csv:
+        MOL_DATA.to_csv("molcomplex.csv",index=False)
+    
 if __name__ == "__main__":
     main()
