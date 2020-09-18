@@ -12,7 +12,8 @@ A collaboration with the Sarpong group
 - mordred
 
 # to do list
-- output dataframe as CSV
+- compare against human metric
+- comment out descriptors that are highly correlated (say > 0.9)
 
 # metrics implemented
 - Bertz Complexity (CT) Score (JACS 1981, 103, 3241-3243)
