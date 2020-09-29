@@ -13,7 +13,10 @@ warnings.simplefilter(action='ignore', category=UserWarning) #ignore pandas User
 class mol_complex(DataFrame):
     #definition of mol_complex objects
     def __init__(self,mol_smiles):
-        super().__init__(mol_smiles, columns=["SMILES"])
+        if isinstance(mol_smiles, (DataFrame, pd.core.internals.BlockManager) ):
+            super(mol_complex, self).__init__(mol_smiles)
+        else:
+            super(mol_complex,self).__init__(mol_smiles, columns=["SMILES"])
         mol_smiles = list(mol_smiles)
 
         #general names for molecule
@@ -23,11 +26,11 @@ class mol_complex(DataFrame):
         self.inchi = [Chem.inchi.MolToInchi(mol) for mol in self.mol_objects]
         self.inchikey =  [Chem.inchi.MolToInchiKey(mol) for mol in self.mol_objects]
         # self.iupac_name
-        
+
         #simple molecular properties
         self['molecular_formula'] = [rdMolDescriptors.CalcMolFormula(mol) for mol in self.mol_objects]
         self['molecular_weight'] = [Descriptors.ExactMolWt(mol) for mol in self.mol_objects]
-        
+
         #implemented molecular scores
         self['BALABAN'] = get_balaban_score(self.mol_objects)
         self['BERTZ'] = get_bertz_score(self.mol_objects)
@@ -35,8 +38,10 @@ class mol_complex(DataFrame):
         self['HKALPHA'] = get_hallkieralpha_score(self.mol_objects)
         self['IPC'] = get_ipc_score(self.mol_objects)
         self['SAS'] = get_sa_score(self.mol_objects)
+        #self['R-TWC'] = get_rucker_twc(self.mol_objects)
+        #self['PI'] = get_proudfoot_index(self.mol_objects)
         self['SCS'] = get_scscore(mol_smiles)
-        
+
         #assessing functions for mol Descriptors from descriptors.py
         self['DESCRIPTORCOMPLEXITY_UNIQUEAP'] = DESCRIPTORCOMPLEXITY_UNIQUEAP(self.mol_objects)
         self['DESCRIPTORCOMPLEXITY_UNIQUETT'] = DESCRIPTORCOMPLEXITY_UNIQUETT(self.mol_objects)
@@ -93,14 +98,6 @@ class mol_complex(DataFrame):
         self['MOE_TYPE_ESTATE_VSA'] = MOE_TYPE_ESTATE_VSA(self.mol_objects)
         self['VDW_VOLUME_ABC'] = VDW_VOLUME_ABC(self.mol_objects)
         self['ZAGREB_INDEX'] = ZAGREB_INDEX(self.mol_objects)
-
-        
-    # this method is makes it so our methods return an instance
-    # of a mol object, instead of a regular DataFrame
-    # obtained from https://dev.to/pj_trainor/extending-the-pandas-dataframe-133l
-    @property
-    def _constructor(self):
-        return mol_complex
 
 if __name__ == "__main__":
 

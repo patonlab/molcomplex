@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#/usr/bin/env python
 
 #####################################################.
 # 		   This file stores all the functions 	    #
@@ -26,5 +26,5 @@ def twc(mol):
             awc[atom_num][walk-1] = awc_count(walk,atom)
 
     mwc_count =  np.sum(awc, axis = 0)
-    twc_count = np.sum(mwc)/2
+    twc_count = np.sum(mwc_count)/2
     return twc_count

@@ -24,13 +24,14 @@ def main():
                         help="Add H atoms to all structures before computing complexity score")
     parser.add_argument("--csv", dest="csv", action="store_true", default=False,
                         help="Export data to .CSV formatted file")
+    parser.add_argument("--file", dest="file", default=[],
+                        help="Input file for calculations of descriptors",nargs='*')
     # Parse Arguments
     (options, args) = parser.parse_known_args()
 
     # File(s) to be parsed
     files = []
-    args = sys.argv[1:]
-    for elem in args:
+    for elem in options.file:
         if os.path.splitext(elem)[1].lower() in SUPPORTED_EXTENSIONS:  # Look for file names
             for file in glob(elem): files.append(file)
         else:
@@ -54,17 +55,17 @@ def main():
 
                 # append all smiles to the mol_smiles list
                 mol_smiles.append(smi)
-    
+
     MOL_DATA = mol_complex(mol_smiles)
 
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
         print(MOL_DATA)
     total_time = time.time() - start
-    
+
     print("Num Descriptors: ",len(MOL_DATA.columns) - 1)
     print("Total Time: ",total_time)
     if options.csv:
         MOL_DATA.to_csv("molcomplex.csv",index=False)
-    
+
 if __name__ == "__main__":
     main()

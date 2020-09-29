@@ -20,10 +20,14 @@ try:
 	from .metrics import sa_score
 	from .metrics import boettcher
 	from .metrics import standalone_model_numpy
+	from .metrics import proudfoot
+	from .metrics import rucker_twc
 except:
 	from metrics import sa_score
 	from metrics import boettcher
 	from metrics import standalone_model_numpy
+	from metrics import proudfoot
+	from metrics import rucker_twc
 
 
 # Bertz Complexity Score (JACS 1981, 103, 3241-3243)
@@ -120,6 +124,28 @@ def get_scscore(mols):
 		SC_Scores.append(score)
 	return SC_Scores
 
+def get_rucker_twc(mols):
+	twc_scores = []
+	for i, mol in enumerate(mols):
+		try:
+			score = rucker_twc.twc(mol)
+		except:
+			 score = np.nan
+
+		twc_scores.append(score)
+	return twc_scores
+
+def get_proudfoot_index_twc(mols):
+	pi_scores = []
+	for i, mol in enumerate(mols):
+		try:
+			score = proundfoot.proudfoot_index(mol)[0]
+		except:
+			 score = np.nan
+
+		pi_scores.append(score)
+	return pi_scores
+
 ''' Taken from Merck Paper descriptors '''
 
 ''' 1. Descriptor complex - AP and TT '''
@@ -147,7 +173,7 @@ def DESCRIPTORCOMPLEXITY_UNIQUETT(mols):
 			num_uniq_tt = np.nan
 		num_uniq_tt_list.append(num_uniq_tt)
 	return num_uniq_tt_list
-	
+
 def DESCRIPTORCOMPLEXITY_TOTALAP(mols):
 	num_tot_AP_list = []
 	for i, mol in enumerate(mols):
@@ -166,14 +192,11 @@ def DESCRIPTORCOMPLEXITY_TOTALTT(mols):
 
 def DESCRIPTORCOMPLEXITY_APCOMPLEX(mols):
 	apc_list = []
-	for i, mol in enumerate(mols):
-		try:
-			num_uniq = DESCRIPTORCOMPLEXITY_UNIQUEAP(mol)
-			num_tot = DESCRIPTORCOMPLEXITY_TOTALAP(mol)
-			if num_tot == 0: apc = 0
-			else: apc = num_uniq/num_tot
-		except:
-			apc = np.nan
+	num_uniq = DESCRIPTORCOMPLEXITY_UNIQUEAP(mols)
+	num_tot = DESCRIPTORCOMPLEXITY_TOTALAP(mols)
+	for i,j in zip(num_uniq,num_tot):
+		if j == 0: apc = 0
+		else: apc = i/j
 		apc_list.append(apc)
 	return apc_list
 
@@ -220,46 +243,38 @@ def SP3CARBONS_TOTALCARBON_COUNT(mols):
 
 def SP3CARBONS_CAR_ALLATOM_RATIO(mols):
 	cratio_list = []
-	for i, mol in enumerate(mols):
-		try:
-			numcar = SP3CARBONS_TOTALCARBON_COUNT(mol)
-			numatoms  = SP3CARBONS_TOTALATOM_COUNT(mol)
-			if numatoms == 0: cratio = 0
-			else: cratio = numcar/numatoms
-		except:
-			cratio = np.nan
+
+	numcar = SP3CARBONS_TOTALCARBON_COUNT(mols)
+	numatoms  = SP3CARBONS_TOTALATOM_COUNT(mols)
+	for i,j in zip(numcar,numatoms):
+		if j == 0: cratio = 0
+		else: cratio = i/j
 		cratio_list.append(cratio)
 	return cratio_list
-	
+
 ######################
 
 def SP3CARBONS_CHIRAL_ALLATOM_RATIO(mols):
 	chiratio_list = []
-	for i, mol in enumerate(mols):
-		try:
-			numchiral = SP3CARBONS_CHIRAL_COUNT(mol)
-			numatoms  = SP3CARBONS_TOTALATOM_COUNT(mol)
-			if numatoms == 0: chiratio = 0
-			else: chiratio = numchiral/numatoms
-		except:
-			chiratio = np.nan
+	numchiral = SP3CARBONS_CHIRAL_COUNT(mols)
+	numatoms  = SP3CARBONS_TOTALATOM_COUNT(mols)
+	for i,j in zip(numchiral,numatoms):
+		if j == 0: chiratio = 0
+		else: chiratio = i/j
 		chiratio_list.append(chiratio)
 	return chiratio_list
 
 def SP3CARBONS_CHIRAL_ALLCARBON_RATIO(mols):
 	chiratio_list = []
-	for i, mol in enumerate(mols):
-		try:
-			numchiral = SP3CARBONS_CHIRAL_COUNT(mol)
-			numcarbons  = SP3CARBONS_TOTALCARBON_COUNT(mol)
-			if numcarbons == 0: chiratio = 0
-			else: chiratio = numchiral/numcarbons
-		except:
-			chiratio= np.nan
+	numchiral = SP3CARBONS_CHIRAL_COUNT(mols)
+	numcarbons  = SP3CARBONS_TOTALCARBON_COUNT(mols)
+	for i,j in zip(numchiral,numcarbons):
+		if j == 0: chiratio = 0
+		else: chiratio = i/j
 		chiratio_list.append(chiratio)
 	return chiratio_list
-	
-	
+
+
 
 def SP3CARBONS_CHIRAL_COUNT(mols):
 	c_chiral_list = []
@@ -292,28 +307,22 @@ def SP3CARBONS_CSP2_COUNT(mols):
 
 def SP3CARBONS_CSP2_ALLATOM_RATIO(mols):
 	csp2ratio_list = []
-	for i, mol in enumerate(mols):
-		try:
-			numcsp2 = SP3CARBONS_CSP2_COUNT(mol)
-			numatoms  = SP3CARBONS_TOTALATOM_COUNT(mol)
-			if numatoms == 0: csp2ratio = 0
-			else: csp2ratio = numcsp2/numatoms
-		except:
-			csp2ratio = np.nan
+	numcsp2 = SP3CARBONS_CSP2_COUNT(mols)
+	numatoms  = SP3CARBONS_TOTALATOM_COUNT(mols)
+	for i,j in zip(numcsp2,numatoms):
+		if j == 0: csp2ratio = 0
+		else: csp2ratio = i/j
 		csp2ratio_list.append(csp2ratio)
 	return csp2ratio_list
-	
+
 
 def SP3CARBONS_CSP2_ALLCARBON_RATIO(mols):
 	csp2ratio_list = []
-	for i, mol in enumerate(mols):
-		try:
-			numcsp2 = SP3CARBONS_CSP2_COUNT(mol)
-			numcar  = SP3CARBONS_TOTALCARBON_COUNT(mol)
-			if numcar == 0: csp2ratio = 0
-			else: csp2ratio = numcsp2/numcar
-		except:
-			csp2ratio = np.nan
+	numcsp2 = SP3CARBONS_CSP2_COUNT(mols)
+	numcar  = SP3CARBONS_TOTALCARBON_COUNT(mols)
+	for i,j in zip(numcsp2,numcar):
+		if j == 0: csp2ratio = 0
+		else: csp2ratio = i/j
 		csp2ratio_list.append(csp2ratio)
 	return csp2ratio_list
 
@@ -334,27 +343,21 @@ def SP3CARBONS_CSP3_COUNT(mols):
 
 def SP3CARBONS_CSP3_ALLATOM_RATIO(mols):
 	csp3ratio_list = []
-	for i, mol in enumerate(mols):
-		try:
-			numcsp3 = SP3CARBONS_CSP3_COUNT(mol)
-			numatoms  = SP3CARBONS_TOTALATOM_COUNT(mol)
-			if numatoms == 0: csp3ratio = 0
-			else: csp3ratio = numcsp3/numatoms
-		except:
-			csp3ratio = np.nan
+	numcsp3 = SP3CARBONS_CSP3_COUNT(mols)
+	numatoms  = SP3CARBONS_TOTALATOM_COUNT(mols)
+	for i,j in zip(numcsp3,numatoms):
+		if j == 0: csp3ratio = 0
+		else: csp3ratio = i/j
 		csp3ratio_list.append(csp3ratio)
 	return csp3ratio_list
 
 def SP3CARBONS_CSP3_ALLCARBON_RATIO(mols):
 	csp3ratio_list = []
-	for i, mol in enumerate(mols):
-		try:
-			numcsp3 = SP3CARBONS_CSP3_COUNT(mol)
-			numcar  = SP3CARBONS_TOTALCARBON_COUNT(mol)
-			if numcar == 0: csp3ratio = 0
-			else: csp3ratio = numcsp3/numcar
-		except:
-			csp3ratio = np.nan
+	numcsp3 = SP3CARBONS_CSP3_COUNT(mols)
+	numcar  = SP3CARBONS_TOTALCARBON_COUNT(mols)
+	for i,j in zip(numcsp3,numcar):
+		if j == 0: csp3ratio = 0
+		else: csp3ratio = i/j
 		csp3ratio_list.append(csp3ratio)
 	return csp3ratio_list
 
@@ -375,27 +378,21 @@ def SP3CARBONS_CSP_COUNT(mols):
 
 def SP3CARBONS_CSP_ALLATOM_RATIO(mols):
 	cspratio_list = []
-	for i, mol in enumerate(mols):
-		try:
-			numcsp = SP3CARBONS_CSP_COUNT(mol)
-			numatoms  = SP3CARBONS_TOTALATOM_COUNT(mol)
-			if numatoms == 0: cspratio = 0
-			else: cspratio = numcsp/numatoms
-		except:
-			cspratio = np.nan
+	numcsp = SP3CARBONS_CSP_COUNT(mols)
+	numatoms  = SP3CARBONS_TOTALATOM_COUNT(mols)
+	for i,j in zip(numcsp,numatoms):
+		if j == 0: cspratio = 0
+		else: cspratio = i/j
 		cspratio_list.append(cspratio)
 	return cspratio_list
 
 def SP3CARBONS_CSP_ALLCARBON_RATIO(mols):
 	cspratio_list = []
-	for i, mol in enumerate(mols):
-		try:
-			numcsp = SP3CARBONS_CSP_COUNT(mol)
-			numcar  = SP3CARBONS_TOTALCARBON_COUNT(mol)
-			if numcar == 0: cspratio = 0
-			else: cspratio = numcsp/numcar
-		except:
-			cspratio = np.nan
+	numcsp = SP3CARBONS_CSP_COUNT(mols)
+	numcar  = SP3CARBONS_TOTALCARBON_COUNT(mols)
+	for i,j in zip(numcsp,numcar):
+		if j == 0: cspratio = 0
+		else: cspratio = i/j
 		cspratio_list.append(cspratio)
 	return cspratio_list
 
@@ -441,7 +438,7 @@ def RINGINFO_NUM_ARO_CARBOCYCLE(mols):
 			aroccycle= np.nan
 		aroccycle_list.append(aroccycle)
 	return aroccycle_list
-	
+
 def RINGINFO_NUM_ARO_HETEROCYCLE(mols):
 	arohetcycle_list = []
 	for i, mol in enumerate(mols):
@@ -471,7 +468,7 @@ def RINGINFO_NUM_BRIDGE_ATOMS(mols):
 			bridge = np.nan
 		bridge_list.append(bridge)
 	return bridge_list
-	
+
 def RINGINFO_NUM_SPIRO_ATOMS(mols):
 	spiro_list = []
 	for i, mol in enumerate(mols):
@@ -583,12 +580,10 @@ def PUBCHEM_ATOM_STEREO_COUNT(mols):
 
 def PUBCHEM_DEFINED_ATOM_STEREO_COUNT(mols):
 	dasc_list = []
-	for i, mol in enumerate(mols):
-		try:
-			dasc = PUBCHEM_ATOM_STEREO_COUNT(mol) - PUBCHEM_UNDEFINED_ATOM_STEREO_COUNT(mol)
-		except:
-			dasc= np.nan
-		dasc_list.append(dasc)
+	all_count = PUBCHEM_ATOM_STEREO_COUNT(mols)
+	undefined_count = PUBCHEM_UNDEFINED_ATOM_STEREO_COUNT(mols)
+	for i,j in zip(all_count,undefined_count):
+		dasc_list.append(i-j)
 	return dasc_list
 
 def PUBCHEM_UNDEFINED_ATOM_STEREO_COUNT(mols):
@@ -602,19 +597,19 @@ def PUBCHEM_UNDEFINED_ATOM_STEREO_COUNT(mols):
 	return uasc_list
 
 def PUBCHEM_BOND_STEREO_COUNT(mols):
-	return 0
+	return np.zeros(len(mols))
 
 def PUBCHEM_DEFINED_BOND_STEREO_COUNT(mols):
-	return 0
+	return np.zeros(len(mols))
 
 def PUBCHEM_UNDEFINED_ATOM_STEREO_COUNT(mols):
-	return 0
+	return np.zeros(len(mols))
 
 def PUBCHEM_COVALENT_UNIT_COUNT(mols):
-	return 0
+	return np.zeros(len(mols))
 
 ''' Mordred provided descriptors '''
-	
+
 def KAPPA_SHAPE_INDEX1(mols):
 	"""Defined on page 9 of https://www.epa.gov/sites/production/files/2015-05/documents/moleculardescriptorsguide-v102.pdf"""
 	ksi1 = KappaShapeIndex.KappaShapeIndex1()
@@ -626,7 +621,7 @@ def KAPPA_SHAPE_INDEX1(mols):
 			ksi = np.nan
 		ksi_list.append(ksi)
 	return ksi_list
-	
+
 def KAPPA_SHAPE_INDEX2(mols):
 	ksi2 = KappaShapeIndex.KappaShapeIndex2()
 	ksi_list = []
@@ -637,7 +632,7 @@ def KAPPA_SHAPE_INDEX2(mols):
 			ksi = np.nan
 		ksi_list.append(ksi)
 	return ksi_list
-	
+
 def KAPPA_SHAPE_INDEX3(mols):
 	ksi3 = KappaShapeIndex.KappaShapeIndex3()
 	ksi_list = []
@@ -648,7 +643,7 @@ def KAPPA_SHAPE_INDEX3(mols):
 			ksi = np.nan
 		ksi_list.append(ksi)
 	return ksi_list
-	
+
 def MCGOWAN_VOLUME(mols):
 	mv = McGowanVolume.McGowanVolume()
 	mv_num_list = []
@@ -659,7 +654,7 @@ def MCGOWAN_VOLUME(mols):
 			mv_num = np.nan
 		mv_num_list.append(mv_num)
 	return mv_num_list
-	
+
 def MOE_TYPE_Labute_ASA(mols):
 	lasa = MoeType.LabuteASA()
 	lasa_num_list = []
@@ -670,7 +665,7 @@ def MOE_TYPE_Labute_ASA(mols):
 			lasa_num= np.nan
 		lasa_num_list.append(lasa_num)
 	return lasa_num_list
-	
+
 def MOE_TYPE_PEOE_VSA(mols):
 	pvsa = MoeType.PEOE_VSA()
 	pvsa_val_list = []
@@ -681,13 +676,13 @@ def MOE_TYPE_PEOE_VSA(mols):
 			pvsa_val = np.nan
 		pvsa_val_list.append(pvsa_val)
 	return pvsa_val_list
-	
+
 def MOE_TYPE_SMR_VSA(mols):
 	svsa = MoeType.SMR_VSA()
 	svsa_val_list = []
 	for i, mol in enumerate(mols):
 		try:
-			svsa_val =  svsa(mol)  
+			svsa_val =  svsa(mol)
 		except:
 			svsa_val= np.nan
 		svsa_val_list.append(svsa_val)
@@ -698,18 +693,18 @@ def MOE_TYPE_SLOGP_VSA(mols):
 	slpvsa_val_list = []
 	for i, mol in enumerate(mols):
 		try:
-			slpvsa_val = slpvsa(mol) 
+			slpvsa_val = slpvsa(mol)
 		except:
 			slpvsa_val= np.nan
 		slpvsa_val_list.append(slpvsa_val)
 	return slpvsa_val_list
-	
+
 def MOE_TYPE_ESTATE_VSA(mols):
 	esvsa = MoeType.EState_VSA()
 	esvsa_val_list = []
 	for i, mol in enumerate(mols):
 		try:
-			esvsa_val = esvsa(mol) 
+			esvsa_val = esvsa(mol)
 		except:
 			esvsa_val= np.nan
 		esvsa_val_list.append(esvsa_val)
@@ -725,7 +720,7 @@ def VDW_VOLUME_ABC(mols):
 			vvabc_val= np.nan
 		vvabc_val_list.append(vvabc_val)
 	return vvabc_val_list
-	
+
 def ZAGREB_INDEX(mols):
 	zi = ZagrebIndex.ZagrebIndex()
 	zi_val_list = []
@@ -736,7 +731,7 @@ def ZAGREB_INDEX(mols):
 			zi_val= np.nan
 		zi_val_list.append(zi_val)
 	return zi_val_list
-	
+
 ''' DBSTEP descriptors - need 3d Coords'''
 
 def MOL_VOLUME(mols):
@@ -749,12 +744,12 @@ def MOL_VOLUME(mols):
 			mol_vol	= np.nan
 		mol_vol_list.append(mol_vol)
 	return mol_vol_list
-	
+
 #template for new descriptors
 # _list = []
 # for i, mol in enumerate(mols):
 # 	try:
-# 
+#
 # 	except:
 # 		= np.nan
 # 	_list.append()
