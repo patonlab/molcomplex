@@ -186,8 +186,15 @@ def DESCRIPTORCOMPLEXITY_TOTALAP(mols):
 	return num_tot_AP_list
 
 def DESCRIPTORCOMPLEXITY_TOTALTT(mols):
-	#need to find a wways to get total TT
-	return 0
+	num_tot_TT_list = []
+	for i, mol in enumerate(mols):
+		try:
+			num_tot_TT = len(Chem.rdmolops.FindAllPathsOfLengthN(mol,3))
+		except:
+			num_tot_TT = np.nan
+		num_tot_TT_list.append(num_tot_TT)
+	return num_tot_TT_list
+
 
 def DESCRIPTORCOMPLEXITY_APCOMPLEX(mols):
 	apc_list = []
@@ -201,14 +208,11 @@ def DESCRIPTORCOMPLEXITY_APCOMPLEX(mols):
 
 def DESCRIPTORCOMPLEXITY_TTCOMPLEX(mols):
 	ttc_list = []
-	for i, mol in enumerate(mols):
-		try:
-			num_uniq = DESCRIPTORCOMPLEXITY_UNIQUETT(mol)
-			num_tot = DESCRIPTORCOMPLEXITY_TOTALTT(mol)
-			if num_tot == 0: ttc = 0
-			else: ttc = num_uniq/num_tot
-		except:
-			ttc = np.nan
+	num_uniq = DESCRIPTORCOMPLEXITY_UNIQUETT(mols)
+	num_tot = DESCRIPTORCOMPLEXITY_TOTALTT(mols)
+	for i,j in zip(num_uniq,num_tot):
+		if j == 0: ttc = 0
+		else: ttc = i/j
 		ttc_list.append(ttc)
 	return ttc_list
 
