@@ -4,6 +4,7 @@ from rdkit.Chem import Descriptors, rdMolDescriptors
 from pandas import DataFrame
 from descriptors import *
 
+
 import pandas as pd
 pd.option_context('display.max_rows', None, 'display.max_columns', None)
 import warnings
@@ -12,7 +13,7 @@ warnings.simplefilter(action='ignore', category=UserWarning) #ignore pandas User
 
 class mol_complex(DataFrame):
     #definition of mol_complex objects
-    def __init__(self,mol_smiles):
+    def __init__(self,mol_smiles,options):
         if isinstance(mol_smiles, (DataFrame, pd.core.internals.BlockManager) ):
             super(mol_complex, self).__init__(mol_smiles)
         else:
@@ -38,9 +39,12 @@ class mol_complex(DataFrame):
         self['HKALPHA'] = get_hallkieralpha_score(self.mol_objects)
         self['IPC'] = get_ipc_score(self.mol_objects)
         self['SAS'] = get_sa_score(self.mol_objects)
-        #self['R-TWC'] = get_rucker_twc(self.mol_objects)
-        #self['PI'] = get_proudfoot_index(self.mol_objects)
         self['SCS'] = get_scscore(mol_smiles)
+        self['PI'] = get_proudfoot_index(self.mol_objects)
+        if options.twc:
+            self['R-TWC'] = get_rucker_twc(self.mol_objects)
+
+
 
         #assessing functions for mol Descriptors from descriptors.py
         self['DESCRIPTORCOMPLEXITY_UNIQUEAP'] = DESCRIPTORCOMPLEXITY_UNIQUEAP(self.mol_objects)
@@ -98,13 +102,3 @@ class mol_complex(DataFrame):
         self['MOE_TYPE_ESTATE_VSA'] = MOE_TYPE_ESTATE_VSA(self.mol_objects)
         self['VDW_VOLUME_ABC'] = VDW_VOLUME_ABC(self.mol_objects)
         self['ZAGREB_INDEX'] = ZAGREB_INDEX(self.mol_objects)
-
-if __name__ == "__main__":
-
-    #just for testing the class is working
-    smi = 'CCCC'
-    mol_object = mol_complex([smi])
-    print('SMILES',mol_object.SMILES[0])
-    print('MOLFromSMILES',mol_object.mol)
-    print(mol_object)
-    mol_object.to_csv("test_butane.csv",index=False)

@@ -7,6 +7,7 @@
 
 import rdkit
 from rdkit import Chem
+import numpy as np
 
 
 def calc_ca(num_uni_detail_list_1,num_uni_detail_list_2,total_all_details):

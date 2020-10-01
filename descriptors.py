@@ -135,14 +135,13 @@ def get_rucker_twc(mols):
 		twc_scores.append(score)
 	return twc_scores
 
-def get_proudfoot_index_twc(mols):
+def get_proudfoot_index(mols):
 	pi_scores = []
 	for i, mol in enumerate(mols):
 		try:
-			score = proundfoot.proudfoot_index(mol)[0]
+			score = proudfoot.proudfoot_index(mol)[0]
 		except:
 			 score = np.nan
-
 		pi_scores.append(score)
 	return pi_scores
 

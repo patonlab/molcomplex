@@ -26,6 +26,9 @@ def main():
                         help="Export data to .CSV formatted file")
     parser.add_argument("--file", dest="file", default=[],
                         help="Input file for calculations of descriptors",nargs='*')
+    parser.add_argument("--twc", dest="twc", action="store_true", default=False,
+                        help="Rucker's total walk count")
+
     # Parse Arguments
     (options, args) = parser.parse_known_args()
 
@@ -56,7 +59,7 @@ def main():
                 # append all smiles to the mol_smiles list
                 mol_smiles.append(smi)
 
-    MOL_DATA = mol_complex(mol_smiles)
+    MOL_DATA = mol_complex(mol_smiles,options)
 
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
         print(MOL_DATA)
