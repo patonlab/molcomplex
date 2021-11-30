@@ -34,10 +34,13 @@ except:
 def get_bertz_score(mols):
 	bertz_scores = []
 	for i, mol in enumerate(mols):
-		try:
-			score = graph.BertzCT(mol)
-		except:
-			 score = np.nan
+		score = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				score += graph.BertzCT(mol)
+			except:
+				score = 0
 
 		bertz_scores.append(score)
 	return bertz_scores
@@ -46,10 +49,13 @@ def get_bertz_score(mols):
 def get_balaban_score(mols):
 	balaban_scores = []
 	for i, mol in enumerate(mols):
-		try:
-			score = graph.BalabanJ(mol)
-		except:
-			 score = np.nan
+		score = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				score += graph.BalabanJ(mol)
+			except:
+				score = 0
 
 		balaban_scores.append(score)
 	return balaban_scores
@@ -58,10 +64,13 @@ def get_balaban_score(mols):
 def get_hallkieralpha_score(mols):
 	hkalpha_scores = []
 	for i, mol in enumerate(mols):
-		try:
-			score = graph.HallKierAlpha(mol)
-		except:
-			 score = np.nan
+		score = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				score += graph.HallKierAlpha(mol)
+			except:
+				score = 0
 
 		hkalpha_scores.append(score)
 	return hkalpha_scores
@@ -71,10 +80,13 @@ def get_hallkieralpha_score(mols):
 def get_ipc_score(mols):
 	IPC_scores = []
 	for i, mol in enumerate(mols):
-		try:
-			score = graph.Ipc(mol)
-		except:
-			 score = np.nan
+		score = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				score += graph.Ipc(mol)
+			except:
+				score = 0
 
 		IPC_scores.append(score)
 	return IPC_scores
@@ -85,63 +97,74 @@ def get_sa_score(mols):
 	sa_score.readFragmentScores("fpscores")
 	SA_Scores = []
 	for i, mol in enumerate(mols):
-		try:
-			score = sa_score.calculateScore(mol)
-		except:
-			score = np.nan
+		score = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				score += sa_score.calculateScore(mol)
+			except:
+				score = 0
 		SA_Scores.append(score)
 	return SA_Scores
 
 # Boettcher Score (J. Chem. Inf. Model. 2016, 56, 3, 462–470)
-def get_boettcher_score(mols):
+def get_boettcher_score(smis):
 	obConversion = openbabel.OBConversion()
 	obConversion.SetInAndOutFormats("smi", "smi")
 	bottch = boettcher.BottchScore("False")
 	Boettcher_Scores = []
-
-	for i, smi in enumerate(mols):
-		try:
-			mol = openbabel.OBMol()
-			obConversion.ReadString(mol, smi)
-			score=bottch.score(mol)
-		except:
-			score = np.nan
+	for i, smi in enumerate(smis):
+		score = 0
+		for s in smi.split('.'):
+			try:
+				obmol = openbabel.OBMol()
+				obConversion.ReadString(obmol, s)
+				score += bottch.score(obmol)
+			except:
+				score = 0
 
 		Boettcher_Scores.append(score)
 	return Boettcher_Scores
 
 #  SCScore (J. Chem. Inf. Model. 2018, 58, 2, 252)
-def get_scscore(mols):
+def get_scscore(smis):
 	model = standalone_model_numpy.SCScorer()
 	model.restore(os.path.join('.', 'models', 'full_reaxys_model_1024bool', 'model.ckpt-10654.as_numpy.json.gz'))
-
 	SC_Scores = []
-	for i, smi in enumerate(mols):
-		try:
-			(smi, score) = model.get_score_from_smi(smi)
-		except:
-			score = np.nan
-		SC_Scores.append(score)
+	for i, smi in enumerate(smis):
+		scscore = 0
+		for s in smi.split('.'):
+			try:
+				(s, score) = model.get_score_from_smi(s)
+				scscore += score
+			except:
+				scscore = 0
+		SC_Scores.append(scscore)
 	return SC_Scores
 
 def get_rucker_twc(mols):
 	twc_scores = []
 	for i, mol in enumerate(mols):
-		try:
-			score = rucker_twc.twc(mol)
-		except:
-			 score = np.nan
-
+		score = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				score += rucker_twc.twc(mol)
+			except:
+				score = 0
 		twc_scores.append(score)
 	return twc_scores
 
 def get_proudfoot_index(mols):
 	pi_scores = []
 	for i, mol in enumerate(mols):
-		try:
-			score = proudfoot.proudfoot_index(mol)[0]
-		except:
-			 score = np.nan
+		score = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				score += proudfoot.proudfoot_index(mol)[0]
+			except:
+				score = 0
 		pi_scores.append(score)
 	return pi_scores
 
@@ -151,12 +174,15 @@ def get_proudfoot_index(mols):
 def DESCRIPTORCOMPLEXITY_UNIQUEAP(mols):
 	num_uniq_ap_list = []
 	for i, mol in enumerate(mols):
-		try:
-			mol_noHs = Chem.RemoveHs(mol)
-			mol_ap_fp = Pairs.GetAtomPairFingerprint(mol_noHs)
-			num_uniq_ap = len(mol_ap_fp.GetNonzeroElements())
-		except:
-			num_uniq_ap = np.nan
+		num_uniq_ap = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				mol_noHs = Chem.RemoveHs(mol)
+				mol_ap_fp = Pairs.GetAtomPairFingerprint(mol_noHs)
+				num_uniq_ap += len(mol_ap_fp.GetNonzeroElements())
+			except:
+				num_uniq_ap = 0
 		num_uniq_ap_list.append(num_uniq_ap)
 	return num_uniq_ap_list
 
@@ -164,34 +190,43 @@ def DESCRIPTORCOMPLEXITY_UNIQUETT(mols):
 	# need to check as the example from merck as 19 unique but actual unique is 13.
 	num_uniq_tt_list = []
 	for i, mol in enumerate(mols):
-		try:
-			mol_noHs = Chem.RemoveHs(mol)
-			mol_tt_fp = Torsions.GetTopologicalTorsionFingerprint(mol_noHs)
-			num_uniq_tt = len(mol_tt_fp.GetNonzeroElements())
-		except:
-			num_uniq_tt = np.nan
+		num_uniq_tt = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				mol_noHs = Chem.RemoveHs(mol)
+				mol_tt_fp = Torsions.GetTopologicalTorsionFingerprint(mol_noHs)
+				num_uniq_tt += len(mol_tt_fp.GetNonzeroElements())
+			except:
+				num_uniq_tt = 0
 		num_uniq_tt_list.append(num_uniq_tt)
 	return num_uniq_tt_list
 
 def DESCRIPTORCOMPLEXITY_TOTALAP(mols):
 	num_tot_AP_list = []
 	for i, mol in enumerate(mols):
-		try:
-			mol_noHs = Chem.RemoveHs(mol)
-			num_noHs = mol_noHs.GetNumAtoms()
-			num_tot_AP = (num_noHs*(num_noHs - 1))/2
-		except:
-			num_tot_AP= np.nan
+		num_tot_AP = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				mol_noHs = Chem.RemoveHs(mol)
+				num_noHs = mol_noHs.GetNumAtoms()
+				num_tot_AP += (num_noHs*(num_noHs - 1))/2
+			except:
+				num_tot_AP= 0
 		num_tot_AP_list.append(num_tot_AP)
 	return num_tot_AP_list
 
 def DESCRIPTORCOMPLEXITY_TOTALTT(mols):
 	num_tot_TT_list = []
 	for i, mol in enumerate(mols):
-		try:
-			num_tot_TT = len(Chem.rdmolops.FindAllPathsOfLengthN(mol,3))
-		except:
-			num_tot_TT = np.nan
+		num_tot_TT = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				num_tot_TT += len(Chem.rdmolops.FindAllPathsOfLengthN(mol,3))
+			except:
+				num_tot_TT = 0
 		num_tot_TT_list.append(num_tot_TT)
 	return num_tot_TT_list
 
@@ -224,34 +259,43 @@ def DESCRIPTORCOMPLEXITY_TTCOMPLEX(mols):
 def SP3CARBONS_TOTALATOM_COUNT(mols):
 	totatoms_list = []
 	for i, mol in enumerate(mols):
-		try:
-			totatoms = mol.GetNumAtoms()
-		except:
-			totatoms = np.nan
+		totatoms = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				totatoms += mol.GetNumAtoms()
+			except:
+				totatoms = 0
 		totatoms_list.append(totatoms)
 	return totatoms_list
 
 def SP3CARBONS_TOTALCARBON_COUNT(mols):
 	totcar_list = []
 	for i, mol in enumerate(mols):
-		try:
-			totcar =  0
-			for atom in mol.GetAtoms():
-				if atom.GetSymbol() == 'C':
-					totcar += 1
-		except:
-			totcar = np.nan
+		totcar =  0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				for atom in mol.GetAtoms():
+					if atom.GetSymbol() == 'C':
+						totcar += 1
+			except:
+				totcar = 0
 		totcar_list.append(totcar)
 	return totcar_list
 
+
 def SP3CARBONS_CAR_ALLATOM_RATIO(mols):
 	cratio_list = []
-
-	numcar = SP3CARBONS_TOTALCARBON_COUNT(mols)
-	numatoms  = SP3CARBONS_TOTALATOM_COUNT(mols)
-	for i,j in zip(numcar,numatoms):
-		if j == 0: cratio = 0
-		else: cratio = i/j
+	for i, mol in enumerate(mols):
+		cratio = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			numcar = SP3CARBONS_TOTALCARBON_COUNT([mol])
+			numatoms  = SP3CARBONS_TOTALATOM_COUNT([mol])
+			for i,j in zip(numcar,numatoms):
+				if j == 0: cratio += 0
+				else: cratio += i/j
 		cratio_list.append(cratio)
 	return cratio_list
 
@@ -259,21 +303,29 @@ def SP3CARBONS_CAR_ALLATOM_RATIO(mols):
 
 def SP3CARBONS_CHIRAL_ALLATOM_RATIO(mols):
 	chiratio_list = []
-	numchiral = SP3CARBONS_CHIRAL_COUNT(mols)
-	numatoms  = SP3CARBONS_TOTALATOM_COUNT(mols)
-	for i,j in zip(numchiral,numatoms):
-		if j == 0: chiratio = 0
-		else: chiratio = i/j
+	for i, mol in enumerate(mols):
+		chiratio = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			numchiral = SP3CARBONS_CHIRAL_COUNT([mol])
+			numatoms  = SP3CARBONS_TOTALATOM_COUNT([mol])
+			for i,j in zip(numchiral,numatoms):
+				if j == 0: chiratio += 0
+				else: chiratio += i/j
 		chiratio_list.append(chiratio)
 	return chiratio_list
 
 def SP3CARBONS_CHIRAL_ALLCARBON_RATIO(mols):
 	chiratio_list = []
-	numchiral = SP3CARBONS_CHIRAL_COUNT(mols)
-	numcarbons  = SP3CARBONS_TOTALCARBON_COUNT(mols)
-	for i,j in zip(numchiral,numcarbons):
-		if j == 0: chiratio = 0
-		else: chiratio = i/j
+	for i, mol in enumerate(mols):
+		chiratio = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			numchiral = SP3CARBONS_CHIRAL_COUNT([mol])
+			numcarbons  = SP3CARBONS_TOTALCARBON_COUNT([mol])
+			for i,j in zip(numchiral,numcarbons):
+				if j == 0: chiratio += 0
+				else: chiratio += i/j
 		chiratio_list.append(chiratio)
 	return chiratio_list
 
@@ -282,14 +334,16 @@ def SP3CARBONS_CHIRAL_ALLCARBON_RATIO(mols):
 def SP3CARBONS_CHIRAL_COUNT(mols):
 	c_chiral_list = []
 	for i, mol in enumerate(mols):
-		try:
-			c_chiral = 0
-			chiralcenters = Chem.FindMolChiralCenters(mol,includeUnassigned=True)
-			for list in chiralcenters:
-				if mol.GetAtomWithIdx(list[0]).GetSymbol() == 'C':
-					c_chiral += 1
-		except:
-			c_chiral = np.nan
+		c_chiral = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				chiralcenters = Chem.FindMolChiralCenters(mol,includeUnassigned=True)
+				for list in chiralcenters:
+					if mol.GetAtomWithIdx(list[0]).GetSymbol() == 'C':
+						c_chiral += 1
+			except:
+				c_chiral = 0
 		c_chiral_list.append(c_chiral)
 	return c_chiral_list
 
@@ -298,34 +352,44 @@ def SP3CARBONS_CHIRAL_COUNT(mols):
 def SP3CARBONS_CSP2_COUNT(mols):
 	csp2_list = []
 	for i, mol in enumerate(mols):
-		try:
-			csp2 =  0
-			for atom in mol.GetAtoms():
-				if atom.GetSymbol() == 'C' and atom.GetHybridization() == Chem.HybridizationType.SP2:
-					csp2 += 1
-		except:
-			csp2 = np.nan
+		csp2 =  0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				for atom in mol.GetAtoms():
+					if atom.GetSymbol() == 'C' and atom.GetHybridization() == Chem.HybridizationType.SP2:
+						csp2 += 1
+			except:
+				csp2 = 0
 		csp2_list.append(csp2)
 	return csp2_list
 
 def SP3CARBONS_CSP2_ALLATOM_RATIO(mols):
 	csp2ratio_list = []
-	numcsp2 = SP3CARBONS_CSP2_COUNT(mols)
-	numatoms  = SP3CARBONS_TOTALATOM_COUNT(mols)
-	for i,j in zip(numcsp2,numatoms):
-		if j == 0: csp2ratio = 0
-		else: csp2ratio = i/j
+	for i, mol in enumerate(mols):
+		csp2ratio = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			numcsp2 = SP3CARBONS_CSP2_COUNT([mol])
+			numatoms  = SP3CARBONS_TOTALATOM_COUNT([mol])
+			for i,j in zip(numcsp2,numatoms):
+				if j == 0: csp2ratio += 0
+				else: csp2ratio += i/j
 		csp2ratio_list.append(csp2ratio)
 	return csp2ratio_list
 
 
 def SP3CARBONS_CSP2_ALLCARBON_RATIO(mols):
 	csp2ratio_list = []
-	numcsp2 = SP3CARBONS_CSP2_COUNT(mols)
-	numcar  = SP3CARBONS_TOTALCARBON_COUNT(mols)
-	for i,j in zip(numcsp2,numcar):
-		if j == 0: csp2ratio = 0
-		else: csp2ratio = i/j
+	for i, mol in enumerate(mols):
+		csp2ratio = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			numcsp2 = SP3CARBONS_CSP2_COUNT([mol])
+			numcar  = SP3CARBONS_TOTALCARBON_COUNT([mol])
+			for i,j in zip(numcsp2,numcar):
+				if j == 0: csp2ratio += 0
+				else: csp2ratio += i/j
 		csp2ratio_list.append(csp2ratio)
 	return csp2ratio_list
 
@@ -334,33 +398,43 @@ def SP3CARBONS_CSP2_ALLCARBON_RATIO(mols):
 def SP3CARBONS_CSP3_COUNT(mols):
 	csp3_list = []
 	for i, mol in enumerate(mols):
-		try:
-			csp3 =  0
-			for atom in mol.GetAtoms():
-				if atom.GetSymbol() == 'C' and atom.GetHybridization() == Chem.HybridizationType.SP3:
-					csp3 += 1
-		except:
-			csp3 = np.nan
+		csp3 =  0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				for atom in mol.GetAtoms():
+					if atom.GetSymbol() == 'C' and atom.GetHybridization() == Chem.HybridizationType.SP3:
+						csp3 += 1
+			except:
+				csp3 = 0
 		csp3_list.append(csp3)
 	return csp3_list
 
 def SP3CARBONS_CSP3_ALLATOM_RATIO(mols):
 	csp3ratio_list = []
-	numcsp3 = SP3CARBONS_CSP3_COUNT(mols)
-	numatoms  = SP3CARBONS_TOTALATOM_COUNT(mols)
-	for i,j in zip(numcsp3,numatoms):
-		if j == 0: csp3ratio = 0
-		else: csp3ratio = i/j
+	for i, mol in enumerate(mols):
+		csp3ratio = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			numcsp3 = SP3CARBONS_CSP3_COUNT([mol])
+			numatoms  = SP3CARBONS_TOTALATOM_COUNT([mol])
+			for i,j in zip(numcsp3,numatoms):
+				if j == 0: csp3ratio += 0
+				else: csp3ratio += i/j
 		csp3ratio_list.append(csp3ratio)
 	return csp3ratio_list
 
 def SP3CARBONS_CSP3_ALLCARBON_RATIO(mols):
 	csp3ratio_list = []
-	numcsp3 = SP3CARBONS_CSP3_COUNT(mols)
-	numcar  = SP3CARBONS_TOTALCARBON_COUNT(mols)
-	for i,j in zip(numcsp3,numcar):
-		if j == 0: csp3ratio = 0
-		else: csp3ratio = i/j
+	for i, mol in enumerate(mols):
+		csp3ratio = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			numcsp3 = SP3CARBONS_CSP3_COUNT([mol])
+			numcar  = SP3CARBONS_TOTALCARBON_COUNT([mol])
+			for i,j in zip(numcsp3,numcar):
+				if j == 0: csp3ratio += 0
+				else: csp3ratio += i/j
 		csp3ratio_list.append(csp3ratio)
 	return csp3ratio_list
 
@@ -369,33 +443,43 @@ def SP3CARBONS_CSP3_ALLCARBON_RATIO(mols):
 def SP3CARBONS_CSP_COUNT(mols):
 	csp_list = []
 	for i, mol in enumerate(mols):
-		try:
-			csp =  0
-			for atom in mol.GetAtoms():
-				if atom.GetSymbol() == 'C' and atom.GetHybridization() == Chem.HybridizationType.SP:
-					csp += 1
-		except:
-			csp = np.nan
+		csp =  0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				for atom in mol.GetAtoms():
+					if atom.GetSymbol() == 'C' and atom.GetHybridization() == Chem.HybridizationType.SP:
+						csp += 1
+			except:
+				csp = 0
 		csp_list.append(csp)
 	return csp_list
 
 def SP3CARBONS_CSP_ALLATOM_RATIO(mols):
 	cspratio_list = []
-	numcsp = SP3CARBONS_CSP_COUNT(mols)
-	numatoms  = SP3CARBONS_TOTALATOM_COUNT(mols)
-	for i,j in zip(numcsp,numatoms):
-		if j == 0: cspratio = 0
-		else: cspratio = i/j
+	for i, mol in enumerate(mols):
+		cspratio = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			numcsp = SP3CARBONS_CSP_COUNT([mol])
+			numatoms  = SP3CARBONS_TOTALATOM_COUNT([mol])
+			for i,j in zip(numcsp,numatoms):
+				if j == 0: cspratio += 0
+				else: cspratio += i/j
 		cspratio_list.append(cspratio)
 	return cspratio_list
 
 def SP3CARBONS_CSP_ALLCARBON_RATIO(mols):
 	cspratio_list = []
-	numcsp = SP3CARBONS_CSP_COUNT(mols)
-	numcar  = SP3CARBONS_TOTALCARBON_COUNT(mols)
-	for i,j in zip(numcsp,numcar):
-		if j == 0: cspratio = 0
-		else: cspratio = i/j
+	for i, mol in enumerate(mols):
+		cspratio = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			numcsp = SP3CARBONS_CSP_COUNT([mol])
+			numcar  = SP3CARBONS_TOTALCARBON_COUNT([mol])
+			for i,j in zip(numcsp,numcar):
+				if j == 0: cspratio += 0
+				else: cspratio += i/j
 		cspratio_list.append(cspratio)
 	return cspratio_list
 
@@ -404,30 +488,39 @@ def SP3CARBONS_CSP_ALLCARBON_RATIO(mols):
 def RINGINFO_NUM_ALI_CARBOCYCLE(mols):
 	aliccycle_list = []
 	for i, mol in enumerate(mols):
-		try:
-			aliccycle = Chem.rdMolDescriptors.CalcNumAliphaticCarbocycles(mol)
-		except:
-			aliccycle = np.nan
+		aliccycle = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				aliccycle += Chem.rdMolDescriptors.CalcNumAliphaticCarbocycles(mol)
+			except:
+				aliccycle = 0
 		aliccycle_list.append(aliccycle)
 	return aliccycle_list
 
 def RINGINFO_NUM_ALI_HETEROCYCLE(mols):
 	alihetcycle_list = []
 	for i, mol in enumerate(mols):
-		try:
-			alihetcycle = Chem.rdMolDescriptors.CalcNumAliphaticHeterocycles(mol)
-		except:
-			alihetcycle = np.nan
+		alihetcycle = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				alihetcycle += Chem.rdMolDescriptors.CalcNumAliphaticHeterocycles(mol)
+			except:
+				alihetcycle = 0
 		alihetcycle_list.append(alihetcycle)
 	return alihetcycle_list
 
 def RINGINFO_NUM_ALI_RINGS(mols):
 	alirings_list = []
 	for i, mol in enumerate(mols):
-		try:
-			alirings = Chem.rdMolDescriptors.CalcNumAliphaticRings(mol)
-		except:
-			alirings= np.nan
+		alirings = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				alirings += Chem.rdMolDescriptors.CalcNumAliphaticRings(mol)
+			except:
+				alirings= 0
 		alirings_list.append(alirings)
 	return alirings_list
 
@@ -435,50 +528,65 @@ def RINGINFO_NUM_ALI_RINGS(mols):
 def RINGINFO_NUM_ARO_CARBOCYCLE(mols):
 	aroccycle_list = []
 	for i, mol in enumerate(mols):
-		try:
-			aroccycle = Chem.rdMolDescriptors.CalcNumAromaticCarbocycles(mol)
-		except:
-			aroccycle= np.nan
+		aroccycle = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				aroccycle += Chem.rdMolDescriptors.CalcNumAromaticCarbocycles(mol)
+			except:
+				aroccycle = 0
 		aroccycle_list.append(aroccycle)
 	return aroccycle_list
 
 def RINGINFO_NUM_ARO_HETEROCYCLE(mols):
 	arohetcycle_list = []
 	for i, mol in enumerate(mols):
-		try:
-			arohetcycle = Chem.rdMolDescriptors.CalcNumAromaticHeterocycles(mol)
-		except:
-			arohetcycle= np.nan
+		arohetcycle = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				arohetcycle += Chem.rdMolDescriptors.CalcNumAromaticHeterocycles(mol)
+			except:
+				arohetcycle= 0
 		arohetcycle_list.append(arohetcycle)
 	return arohetcycle_list
 
 def RINGINFO_NUM_ARO_RINGS(mols):
 	arorings_list = []
 	for i, mol in enumerate(mols):
-		try:
-			arorings = Chem.rdMolDescriptors.CalcNumAromaticRings(mol)
-		except:
-			arorings= np.nan
+		arorings = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				arorings += Chem.rdMolDescriptors.CalcNumAromaticRings(mol)
+			except:
+				arorings= 0
 		arorings_list.append(arorings)
 	return arorings_list
 
 def RINGINFO_NUM_BRIDGE_ATOMS(mols):
 	bridge_list = []
 	for i, mol in enumerate(mols):
-		try:
-			bridge = Chem.rdMolDescriptors.CalcNumBridgeheadAtoms(mol)
-		except:
-			bridge = np.nan
+		bridge = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				bridge += Chem.rdMolDescriptors.CalcNumBridgeheadAtoms(mol)
+			except:
+				bridge = 0
 		bridge_list.append(bridge)
 	return bridge_list
 
 def RINGINFO_NUM_SPIRO_ATOMS(mols):
 	spiro_list = []
 	for i, mol in enumerate(mols):
-		try:
-			spiro = Chem.rdMolDescriptors.CalcNumSpiroAtoms(mol)
-		except:
-			spiro= np.nan
+		smi = Chem.MolToSmiles(mol)
+		spiro = 0
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				spiro += Chem.rdMolDescriptors.CalcNumSpiroAtoms(mol)
+			except:
+				spiro = 0
 		spiro_list.append(spiro)
 	return spiro_list
 
@@ -487,25 +595,29 @@ def RINGINFO_NUM_SPIRO_ATOMS(mols):
 def WIENER_INDEX(mols):
 	wieneridx_list = []
 	for i, mol in enumerate(mols):
-		try:
-			wieneridx = 0
-			amat = Chem.GetDistanceMatrix(mol)
-			num_atoms = mol.GetNumAtoms()
-			for i in range(num_atoms):
-				for j in range(i+1,num_atoms):
-					wieneridx += amat[i][j]
-		except:
-			wieneridx = np.nan
+		wieneridx = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				amat = Chem.GetDistanceMatrix(mol)
+				num_atoms = mol.GetNumAtoms()
+				for i in range(num_atoms):
+					for j in range(i+1,num_atoms):
+						wieneridx += amat[i][j]
+			except:
+				wieneridx = 0
 		wieneridx_list.append(wieneridx)
 	return wieneridx_list
 
 def SMILES_3_2(smis):
 	smi32_list = []
 	for i, smi in enumerate(smis):
-		try:
-			smi32 = len(smi)**(3/2)
-		except:
-			smi32 = np.nan
+		smi32 = 0
+		for s in smi.split('.'):
+			try:
+				smi32 += len(s)**(3/2)
+			except:
+				smi32 = 0
 		smi32_list.append(smi32)
 	return smi32_list
 
@@ -514,70 +626,91 @@ def SMILES_3_2(smis):
 def PUBCHEM_XLOGP(mols):
 	xlogp_list = []
 	for i, mol in enumerate(mols):
-		try:
-			xlogp = Chem.rdMolDescriptors.CalcCrippenDescriptors(mol)[0]
-		except:
-			xlogp = np.nan
+		xlogp = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				xlogp += Chem.rdMolDescriptors.CalcCrippenDescriptors(mol)[0]
+			except:
+				xlogp = 0
 		xlogp_list.append(xlogp)
 	return xlogp_list
 
 def PUBCHEM_TPSA(mols):
 	tpsa_list = []
 	for i, mol in enumerate(mols):
-		try:
-			tpsa = Chem.rdMolDescriptors.CalcTPSA(mol)
-		except:
-			tpsa = np.nan
+		tpsa = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				tpsa += Chem.rdMolDescriptors.CalcTPSA(mol)
+			except:
+				tpsa = 0
 		tpsa_list.append(tpsa)
 	return tpsa_list
 
 def PUBCHEM_H_BOND_DONOR_COUNT(mols):
 	hbd_list = []
 	for i, mol in enumerate(mols):
-		try:
-			hbd = Chem.rdMolDescriptors.CalcNumHBD(mol)
-		except:
-			hbd = np.nan
+		hbd = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				hbd += Chem.rdMolDescriptors.CalcNumHBD(mol)
+			except:
+				hbd = 0
 		hbd_list.append(hbd)
 	return hbd_list
 
 def PUBCHEM_H_BOND_ACCEPTOR_COUNT(mols):
 	hba_list = []
 	for i, mol in enumerate(mols):
-		try:
-			hba = Chem.rdMolDescriptors.CalcNumHBA(mol)
-		except:
-			hba = np.nan
+		hba = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				hba += Chem.rdMolDescriptors.CalcNumHBA(mol)
+			except:
+				hba = 0
 		hba_list.append(hba)
 	return hba_list
 
 def PUBCHEM_ROTATABLE_BOND_COUNT(mols):
 	rbond_list = []
 	for i, mol in enumerate(mols):
-		try:
-			rbond = Chem.rdMolDescriptors.CalcNumRotatableBonds(mol,strict=1)
-		except:
-			rbond = np.nan
+		rbond = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				rbond += Chem.rdMolDescriptors.CalcNumRotatableBonds(mol,strict=1)
+			except:
+				rbond = 0
 		rbond_list.append(rbond)
 	return rbond_list
 
 def PUBCHEM_HEAVY_ATOM_COUNT(mols):
 	hac_list = []
 	for i, mol in enumerate(mols):
-		try:
-			hac = Chem.Lipinski.HeavyAtomCount(mol)
-		except:
-			hac = np.nan
+		hac = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				hac += Chem.Lipinski.HeavyAtomCount(mol)
+			except:
+				hac = 0
 		hac_list.append(hac)
 	return hac_list
 
 def PUBCHEM_ATOM_STEREO_COUNT(mols):
 	asc_list = []
 	for i, mol in enumerate(mols):
-		try:
-			asc = Chem.rdMolDescriptors.CalcNumAtomStereoCenters(mol)
-		except:
-			asc = np.nan
+		asc = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				asc += Chem.rdMolDescriptors.CalcNumAtomStereoCenters(mol)
+			except:
+				asc = 0
 		asc_list.append(asc)
 	return asc_list
 
@@ -592,10 +725,13 @@ def PUBCHEM_DEFINED_ATOM_STEREO_COUNT(mols):
 def PUBCHEM_UNDEFINED_ATOM_STEREO_COUNT(mols):
 	uasc_list = []
 	for i, mol in enumerate(mols):
-		try:
-			uasc = Chem.rdMolDescriptors.CalcNumUnspecifiedAtomStereoCenters(mol)
-		except:
-			uasc = np.nan
+		uasc = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				uasc += Chem.rdMolDescriptors.CalcNumUnspecifiedAtomStereoCenters(mol)
+			except:
+				uasc = 0
 		uasc_list.append(uasc)
 	return uasc_list
 
@@ -618,10 +754,13 @@ def KAPPA_SHAPE_INDEX1(mols):
 	ksi1 = KappaShapeIndex.KappaShapeIndex1()
 	ksi_list = []
 	for i, mol in enumerate(mols):
-		try:
-			ksi = ksi1(mol)
-		except:
-			ksi = np.nan
+		ksi = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				ksi += ksi1(mol)
+			except:
+				ksi = 0
 		ksi_list.append(ksi)
 	return ksi_list
 
@@ -629,10 +768,13 @@ def KAPPA_SHAPE_INDEX2(mols):
 	ksi2 = KappaShapeIndex.KappaShapeIndex2()
 	ksi_list = []
 	for i, mol in enumerate(mols):
-		try:
-			ksi = ksi2(mol)
-		except:
-			ksi = np.nan
+		ksi = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				ksi += ksi2(mol)
+			except:
+				ksi = 0
 		ksi_list.append(ksi)
 	return ksi_list
 
@@ -640,10 +782,13 @@ def KAPPA_SHAPE_INDEX3(mols):
 	ksi3 = KappaShapeIndex.KappaShapeIndex3()
 	ksi_list = []
 	for i, mol in enumerate(mols):
-		try:
-			ksi = ksi3(mol)
-		except:
-			ksi = np.nan
+		ksi = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				ksi += ksi3(mol)
+			except:
+				ksi = 0
 		ksi_list.append(ksi)
 	return ksi_list
 
@@ -651,10 +796,13 @@ def MCGOWAN_VOLUME(mols):
 	mv = McGowanVolume.McGowanVolume()
 	mv_num_list = []
 	for i, mol in enumerate(mols):
-		try:
-			mv_num = mv(mol)
-		except:
-			mv_num = np.nan
+		mv_num = 0 
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				mv_num += mv(mol)
+			except:
+				mv_num = 0
 		mv_num_list.append(mv_num)
 	return mv_num_list
 
@@ -662,10 +810,13 @@ def MOE_TYPE_Labute_ASA(mols):
 	lasa = MoeType.LabuteASA()
 	lasa_num_list = []
 	for i, mol in enumerate(mols):
-		try:
-			lasa_num = lasa(mol)
-		except:
-			lasa_num= np.nan
+		lasa_num = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				lasa_num += lasa(mol)
+			except:
+				lasa_num= 0
 		lasa_num_list.append(lasa_num)
 	return lasa_num_list
 
@@ -673,10 +824,13 @@ def MOE_TYPE_PEOE_VSA(mols):
 	pvsa = MoeType.PEOE_VSA()
 	pvsa_val_list = []
 	for i, mol in enumerate(mols):
-		try:
-			pvsa_val = pvsa(mol)
-		except:
-			pvsa_val = np.nan
+		pvsa_val = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				pvsa_val += pvsa(mol)
+			except:
+				pvsa_val = 0
 		pvsa_val_list.append(pvsa_val)
 	return pvsa_val_list
 
@@ -684,10 +838,13 @@ def MOE_TYPE_SMR_VSA(mols):
 	svsa = MoeType.SMR_VSA()
 	svsa_val_list = []
 	for i, mol in enumerate(mols):
-		try:
-			svsa_val =  svsa(mol)
-		except:
-			svsa_val= np.nan
+		svsa_val = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				svsa_val += svsa(mol)
+			except:
+				svsa_val= 0
 		svsa_val_list.append(svsa_val)
 	return svsa_val_list
 
@@ -695,10 +852,13 @@ def MOE_TYPE_SLOGP_VSA(mols):
 	slpvsa = MoeType.SlogP_VSA()
 	slpvsa_val_list = []
 	for i, mol in enumerate(mols):
-		try:
-			slpvsa_val = slpvsa(mol)
-		except:
-			slpvsa_val= np.nan
+		slpvsa_val = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				slpvsa_val += slpvsa(mol)
+			except:
+				slpvsa_val= 0
 		slpvsa_val_list.append(slpvsa_val)
 	return slpvsa_val_list
 
@@ -706,10 +866,13 @@ def MOE_TYPE_ESTATE_VSA(mols):
 	esvsa = MoeType.EState_VSA()
 	esvsa_val_list = []
 	for i, mol in enumerate(mols):
-		try:
-			esvsa_val = esvsa(mol)
-		except:
-			esvsa_val= np.nan
+		esvsa_val = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				esvsa_val += esvsa(mol)
+			except:
+				esvsa_val= 0
 		esvsa_val_list.append(esvsa_val)
 	return esvsa_val_list
 
@@ -717,10 +880,13 @@ def VDW_VOLUME_ABC(mols):
 	vvabc = VdwVolumeABC.VdwVolumeABC()
 	vvabc_val_list = []
 	for i, mol in enumerate(mols):
-		try:
-			vvabc_val = vvabc(mol)
-		except:
-			vvabc_val= np.nan
+		vvabc_val = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				vvabc_val += vvabc(mol)
+			except:
+				vvabc_val= 0
 		vvabc_val_list.append(vvabc_val)
 	return vvabc_val_list
 
@@ -728,32 +894,39 @@ def ZAGREB_INDEX(mols):
 	zi = ZagrebIndex.ZagrebIndex()
 	zi_val_list = []
 	for i, mol in enumerate(mols):
-		try:
-			zi_val = zi(mol)
-		except:
-			zi_val= np.nan
+		zi_val = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				zi_val += zi(mol)
+			except:
+				zi_val= 0
 		zi_val_list.append(zi_val)
 	return zi_val_list
 
-''' DBSTEP descriptors - need 3d Coords'''
+# ''' DBSTEP descriptors - need 3d Coords'''
 
-def MOL_VOLUME(mols):
-	mol_vol_list = []
-	for i, mol in enumerate(mols):
-		try:
-			sterics = db.dbstep(mol, commandline=True)
-			mol_vol = sterics.occ_vol
-		except:
-			mol_vol	= np.nan
-		mol_vol_list.append(mol_vol)
-	return mol_vol_list
+# def MOL_VOLUME(mols):
+# 	mol_vol_list = []
+# 	for i, mol in enumerate(mols):
+# 		smi = Chem.MolToSmiles(mol)
+# 		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+# 		try:
+# 			sterics = db.dbstep(mol, commandline=True)
+# 			mol_vol = sterics.occ_vol
+# 		except:
+# 			mol_vol	= 0
+# 		mol_vol_list.append(mol_vol)
+# 	return mol_vol_list
 
 #template for new descriptors
 # _list = []
 # for i, mol in enumerate(mols):
+		# smi = Chem.MolToSmiles(mol)
+		# for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
 # 	try:
 #
 # 	except:
-# 		= np.nan
+# 		= 0
 # 	_list.append()
 # return _list

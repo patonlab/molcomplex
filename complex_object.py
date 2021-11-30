@@ -24,9 +24,8 @@ class mol_complex(DataFrame):
         self.mol_objects = [Chem.MolFromSmiles(smi) for smi in mol_smiles]
 
         self.canonical_smiles = [Chem.rdmolfiles.MolToSmiles(mol) for mol in self.mol_objects]
-        self.inchi = [Chem.inchi.MolToInchi(mol) for mol in self.mol_objects]
-        self.inchikey =  [Chem.inchi.MolToInchiKey(mol) for mol in self.mol_objects]
-        # self.iupac_name
+        # self.inchi = [Chem.inchi.MolToInchi(mol) for mol in self.mol_objects]
+        # self.inchikey =  [Chem.inchi.MolToInchiKey(mol) for mol in self.mol_objects]
 
         #simple molecular properties
         self['molecular_formula'] = [rdMolDescriptors.CalcMolFormula(mol) for mol in self.mol_objects]
@@ -43,8 +42,6 @@ class mol_complex(DataFrame):
         self['PI'] = get_proudfoot_index(self.mol_objects)
         if options.twc:
             self['R-TWC'] = get_rucker_twc(self.mol_objects)
-
-
 
         #assessing functions for mol Descriptors from descriptors.py
         self['DESCRIPTORCOMPLEXITY_UNIQUEAP'] = DESCRIPTORCOMPLEXITY_UNIQUEAP(self.mol_objects)
