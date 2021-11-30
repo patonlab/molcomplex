@@ -11,7 +11,7 @@ from glob import glob
 
 import numpy as np
 import pandas as pd
-import os, sys, time
+import os, time
 
 from molcomplex_functions import *
 from complex_object import *
@@ -51,24 +51,26 @@ def main():
             toks = line.split()
             if len(toks) != 0:
                 smi = toks[0]
-                pieces = smi.split('.')
-                if len(pieces) > 1:
-                    smi = max(pieces, key=len) #take largest component by length
-                    print("Taking largest component: %s\t%s" % (smi,name))
+                #pieces = smi.split('.')
+                # if len(pieces) > 1:
+                #     smi = max(pieces, key=len) #take largest component by length
+                #     print("Taking largest component: %s\t%s" % (smi))
 
                 # append all smiles to the mol_smiles list
                 mol_smiles.append(smi)
 
     MOL_DATA = mol_complex(mol_smiles,options)
-
+    total_time = time.time() - start
+    
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
         print(MOL_DATA)
-    total_time = time.time() - start
-
+    
     print("Num Descriptors: ",len(MOL_DATA.columns) - 1)
     print("Total Time: ",total_time)
+
     if options.csv:
-        MOL_DATA.to_csv("molcomplex.csv",index=False)
+        for file in files:
+            MOL_DATA.to_csv(f"molcomplex_{file.split('.')[0]}.csv",index=False)
 
 if __name__ == "__main__":
     main()

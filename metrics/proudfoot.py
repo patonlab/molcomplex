@@ -11,6 +11,8 @@ import numpy as np
 
 
 def calc_ca(num_uni_detail_list_1,num_uni_detail_list_2,total_all_details):
+    if total_all_details == 0:
+        return np.nan
     ca = 0
     for list_1 in num_uni_detail_list_1:
         ca -= (list_1[1]/total_all_details)*(np.log2(list_1[1]/total_all_details))
