@@ -112,23 +112,35 @@ class mol_complex(DataFrame):
         model = standalone_model_numpy.SCScorer()
         model.restore(os.path.join('.', 'models', 'full_reaxys_model_1024bool', 'model.ckpt-10654.as_numpy.json.gz'))
 
-        for i,smi in enumerate(mol_smiles):
+        for i,mol in enumerate(mol_objects):
             #get score for each mol, sum contribs if '.' present
-            for key in func_dict.keys():
+            smi = mol_smiles[i]
+            if '.' in smi:
                 for s in smi.split('.'):
                     mol = Chem.MolFromSmiles(s)
-                    
+                    for key in func_dict.keys():
+                        if key == 'SCS':
+                            #print(key,func_dict[key](mol,model),type(func_dict[key](mol,model)))
+                            self.loc[i,key] += func_dict[key](mol,model)
+                        else:
+                            #print(key,func_dict[key](mol),type(func_dict[key](mol)))
+                            self.loc[i,key] += func_dict[key](mol)
+                if self.options.twc:
+                    for s in smi.split('.'):
+                        mol = Chem.MolFromSmiles(s)
+                        self.loc[i,'R-TWC'] += get_rucker_twc(mol)
+            else: 
+                for key in func_dict.keys():
                     if key == 'SCS':
                         #print(key,func_dict[key](mol,model),type(func_dict[key](mol,model)))
                         self.loc[i,key] += func_dict[key](mol,model)
                     else:
                         #print(key,func_dict[key](mol),type(func_dict[key](mol)))
                         self.loc[i,key] += func_dict[key](mol)
-            if self.options.twc:
-                for s in smi.split('.'):
-                    mol = Chem.MolFromSmiles(s)
-                    self.loc[i,'R-TWC'] += get_rucker_twc(mol)
-
+                if self.options.twc:
+                    for s in smi.split('.'):
+                        mol = Chem.MolFromSmiles(s)
+                        self.loc[i,'R-TWC'] += get_rucker_twc(mol)
         print(self)
 
 
