@@ -53,7 +53,7 @@ def main():
                 smi = toks[0]
                 mol_smiles.append(smi)
 
-    MOL_DATA = mol_complex(mol_smiles,options)
+    MOL_DATA = mol_complex(mol_smiles,options.twc)
 
     total_time = time.time() - start
 

@@ -12,7 +12,10 @@ from rdkit import Chem
 from rdkit.Chem.AtomPairs import Pairs,Torsions
 import rdkit.Chem.GraphDescriptors as graph
 from openbabel import openbabel
+openbabel.obErrorLog.SetOutputLevel(0)
 from mordred import CPSA, KappaShapeIndex, McGowanVolume, MoeType, VdwVolumeABC, ZagrebIndex
+import pkg_resources
+
 #import dbstep.Dbstep as db
 
 # external complexity metrics
@@ -109,6 +112,7 @@ def get_sa_score(mols):
 
 # Boettcher Score (J. Chem. Inf. Model. 2016, 56, 3, 462–470)
 def get_boettcher_score(smis):
+	
 	obConversion = openbabel.OBConversion()
 	obConversion.SetInAndOutFormats("smi", "smi")
 	bottch = boettcher.BottchScore("False")
@@ -129,7 +133,11 @@ def get_boettcher_score(smis):
 #  SCScore (J. Chem. Inf. Model. 2018, 58, 2, 252)
 def get_scscore(smis):
 	model = standalone_model_numpy.SCScorer()
-	model.restore(os.path.join('.', 'models', 'full_reaxys_model_1024bool', 'model.ckpt-10654.as_numpy.json.gz'))
+	resource_package = "molcomplex"
+	resource_path = '/'.join(('models', 'full_reaxys_model_1024bool', 'model.ckpt-10654.as_numpy.json.gz'))
+	json_path = pkg_resources.resource_filename(resource_package, resource_path)
+	model.restore(json_path)
+	#model.restore(os.path.join('.', 'models', 'full_reaxys_model_1024bool', 'model.ckpt-10654.as_numpy.json.gz'))
 	SC_Scores = []
 	for i, smi in enumerate(smis):
 		scscore = 0

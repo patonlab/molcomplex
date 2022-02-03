@@ -13,7 +13,7 @@ warnings.simplefilter(action='ignore', category=UserWarning) #ignore pandas User
 
 class mol_complex(DataFrame):
     #definition of mol_complex objects
-    def __init__(self,mol_smiles,options):
+    def __init__(self,mol_smiles,twc=False):
         if isinstance(mol_smiles, (DataFrame, pd.core.internals.BlockManager) ):
             super(mol_complex, self).__init__(mol_smiles)
         else:
@@ -34,13 +34,13 @@ class mol_complex(DataFrame):
         #implemented molecular scores
         self['BALABAN'] = get_balaban_score(self.mol_objects)
         self['BERTZ'] = get_bertz_score(self.mol_objects)
-        self['BOETTCHER'] = get_boettcher_score(mol_smiles)
+        self['BOETTCHER'] = get_boettcher_score(self.canonical_smiles)
         self['HKALPHA'] = get_hallkieralpha_score(self.mol_objects)
         self['IPC'] = get_ipc_score(self.mol_objects)
         self['SAS'] = get_sa_score(self.mol_objects)
-        self['SCS'] = get_scscore(mol_smiles)
+        self['SCS'] = get_scscore(self.canonical_smiles)
         self['PI'] = get_proudfoot_index(self.mol_objects)
-        if options.twc:
+        if twc:
             self['R-TWC'] = get_rucker_twc(self.mol_objects)
 
         #assessing functions for mol Descriptors from descriptors.py
@@ -74,7 +74,7 @@ class mol_complex(DataFrame):
         self['RINGINFO_NUM_BRIDGE_ATOMS'] = RINGINFO_NUM_BRIDGE_ATOMS(self.mol_objects)
         self['RINGINFO_NUM_SPIRO_ATOMS'] = RINGINFO_NUM_SPIRO_ATOMS(self.mol_objects)
         self['WIENER_INDEX'] = WIENER_INDEX(self.mol_objects)
-        self['SMILES_3_2'] = SMILES_3_2(mol_smiles)
+        self['SMILES_3_2'] = SMILES_3_2(self.canonical_smiles)
         self['PUBCHEM_XLOGP'] = PUBCHEM_XLOGP(self.mol_objects)
         self['PUBCHEM_TPSA'] = PUBCHEM_TPSA(self.mol_objects)
         self['PUBCHEM_H_BOND_DONOR_COUNT'] = PUBCHEM_H_BOND_DONOR_COUNT(self.mol_objects)
