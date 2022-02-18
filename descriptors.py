@@ -43,7 +43,7 @@ def get_bertz_score(mols):
 			try:
 				score += graph.BertzCT(mol)
 			except:
-				score = 0
+				pass
 
 		bertz_scores.append(score)
 	return bertz_scores
@@ -58,7 +58,7 @@ def get_balaban_score(mols):
 			try:
 				score += graph.BalabanJ(mol)
 			except:
-				score = 0
+				pass
 
 		balaban_scores.append(score)
 	return balaban_scores
@@ -73,7 +73,7 @@ def get_hallkieralpha_score(mols):
 			try:
 				score += graph.HallKierAlpha(mol)
 			except:
-				score = 0
+				pass
 
 		hkalpha_scores.append(score)
 	return hkalpha_scores
@@ -89,7 +89,7 @@ def get_ipc_score(mols):
 			try:
 				score += graph.Ipc(mol)
 			except:
-				score = 0
+				pass
 
 		IPC_scores.append(score)
 	return IPC_scores
@@ -106,7 +106,7 @@ def get_sa_score(mols):
 			try:
 				score += sa_score.calculateScore(mol)
 			except:
-				score = 0
+				pass
 		SA_Scores.append(score)
 	return SA_Scores
 
@@ -125,7 +125,7 @@ def get_boettcher_score(smis):
 				obConversion.ReadString(obmol, s)
 				score += bottch.score(obmol)
 			except:
-				score = 0
+				pass
 
 		Boettcher_Scores.append(score)
 	return Boettcher_Scores
@@ -146,7 +146,7 @@ def get_scscore(smis):
 				(s, score) = model.get_score_from_smi(s)
 				scscore += score
 			except:
-				scscore = 0
+				pass
 		SC_Scores.append(scscore)
 	return SC_Scores
 
@@ -159,7 +159,7 @@ def get_rucker_twc(mols):
 			try:
 				score += rucker_twc.twc(mol)
 			except:
-				score = 0
+				pass
 		twc_scores.append(score)
 	return twc_scores
 
@@ -172,7 +172,7 @@ def get_proudfoot_index(mols):
 			try:
 				score += proudfoot.proudfoot_index(mol)[0]
 			except:
-				score = 0
+				pass
 		pi_scores.append(score)
 	return pi_scores
 
@@ -190,7 +190,7 @@ def DESCRIPTORCOMPLEXITY_UNIQUEAP(mols):
 				mol_ap_fp = Pairs.GetAtomPairFingerprint(mol_noHs)
 				num_uniq_ap += len(mol_ap_fp.GetNonzeroElements())
 			except:
-				num_uniq_ap = 0
+				pass
 		num_uniq_ap_list.append(num_uniq_ap)
 	return num_uniq_ap_list
 
@@ -206,7 +206,7 @@ def DESCRIPTORCOMPLEXITY_UNIQUETT(mols):
 				mol_tt_fp = Torsions.GetTopologicalTorsionFingerprint(mol_noHs)
 				num_uniq_tt += len(mol_tt_fp.GetNonzeroElements())
 			except:
-				num_uniq_tt = 0
+				pass
 		num_uniq_tt_list.append(num_uniq_tt)
 	return num_uniq_tt_list
 
@@ -221,7 +221,7 @@ def DESCRIPTORCOMPLEXITY_TOTALAP(mols):
 				num_noHs = mol_noHs.GetNumAtoms()
 				num_tot_AP += (num_noHs*(num_noHs - 1))/2
 			except:
-				num_tot_AP= 0
+				pass
 		num_tot_AP_list.append(num_tot_AP)
 	return num_tot_AP_list
 
@@ -234,7 +234,7 @@ def DESCRIPTORCOMPLEXITY_TOTALTT(mols):
 			try:
 				num_tot_TT += len(Chem.rdmolops.FindAllPathsOfLengthN(mol,3))
 			except:
-				num_tot_TT = 0
+				pass
 		num_tot_TT_list.append(num_tot_TT)
 	return num_tot_TT_list
 
@@ -273,7 +273,7 @@ def SP3CARBONS_TOTALATOM_COUNT(mols):
 			try:
 				totatoms += mol.GetNumAtoms()
 			except:
-				totatoms = 0
+				pass
 		totatoms_list.append(totatoms)
 	return totatoms_list
 
@@ -288,7 +288,7 @@ def SP3CARBONS_TOTALCARBON_COUNT(mols):
 					if atom.GetSymbol() == 'C':
 						totcar += 1
 			except:
-				totcar = 0
+				pass
 		totcar_list.append(totcar)
 	return totcar_list
 
@@ -351,7 +351,7 @@ def SP3CARBONS_CHIRAL_COUNT(mols):
 					if mol.GetAtomWithIdx(list[0]).GetSymbol() == 'C':
 						c_chiral += 1
 			except:
-				c_chiral = 0
+				pass
 		c_chiral_list.append(c_chiral)
 	return c_chiral_list
 
@@ -368,7 +368,7 @@ def SP3CARBONS_CSP2_COUNT(mols):
 					if atom.GetSymbol() == 'C' and atom.GetHybridization() == Chem.HybridizationType.SP2:
 						csp2 += 1
 			except:
-				csp2 = 0
+				pass
 		csp2_list.append(csp2)
 	return csp2_list
 
@@ -414,7 +414,7 @@ def SP3CARBONS_CSP3_COUNT(mols):
 					if atom.GetSymbol() == 'C' and atom.GetHybridization() == Chem.HybridizationType.SP3:
 						csp3 += 1
 			except:
-				csp3 = 0
+				pass
 		csp3_list.append(csp3)
 	return csp3_list
 
@@ -459,7 +459,7 @@ def SP3CARBONS_CSP_COUNT(mols):
 					if atom.GetSymbol() == 'C' and atom.GetHybridization() == Chem.HybridizationType.SP:
 						csp += 1
 			except:
-				csp = 0
+				pass
 		csp_list.append(csp)
 	return csp_list
 
@@ -502,7 +502,7 @@ def RINGINFO_NUM_ALI_CARBOCYCLE(mols):
 			try:
 				aliccycle += Chem.rdMolDescriptors.CalcNumAliphaticCarbocycles(mol)
 			except:
-				aliccycle = 0
+				pass
 		aliccycle_list.append(aliccycle)
 	return aliccycle_list
 
@@ -515,7 +515,7 @@ def RINGINFO_NUM_ALI_HETEROCYCLE(mols):
 			try:
 				alihetcycle += Chem.rdMolDescriptors.CalcNumAliphaticHeterocycles(mol)
 			except:
-				alihetcycle = 0
+				pass
 		alihetcycle_list.append(alihetcycle)
 	return alihetcycle_list
 
@@ -528,7 +528,7 @@ def RINGINFO_NUM_ALI_RINGS(mols):
 			try:
 				alirings += Chem.rdMolDescriptors.CalcNumAliphaticRings(mol)
 			except:
-				alirings= 0
+				pass
 		alirings_list.append(alirings)
 	return alirings_list
 
@@ -542,7 +542,7 @@ def RINGINFO_NUM_ARO_CARBOCYCLE(mols):
 			try:
 				aroccycle += Chem.rdMolDescriptors.CalcNumAromaticCarbocycles(mol)
 			except:
-				aroccycle = 0
+				pass
 		aroccycle_list.append(aroccycle)
 	return aroccycle_list
 
@@ -555,7 +555,7 @@ def RINGINFO_NUM_ARO_HETEROCYCLE(mols):
 			try:
 				arohetcycle += Chem.rdMolDescriptors.CalcNumAromaticHeterocycles(mol)
 			except:
-				arohetcycle= 0
+				pass
 		arohetcycle_list.append(arohetcycle)
 	return arohetcycle_list
 
@@ -568,7 +568,7 @@ def RINGINFO_NUM_ARO_RINGS(mols):
 			try:
 				arorings += Chem.rdMolDescriptors.CalcNumAromaticRings(mol)
 			except:
-				arorings= 0
+				pass
 		arorings_list.append(arorings)
 	return arorings_list
 
@@ -581,7 +581,7 @@ def RINGINFO_NUM_BRIDGE_ATOMS(mols):
 			try:
 				bridge += Chem.rdMolDescriptors.CalcNumBridgeheadAtoms(mol)
 			except:
-				bridge = 0
+				pass
 		bridge_list.append(bridge)
 	return bridge_list
 
@@ -594,7 +594,7 @@ def RINGINFO_NUM_SPIRO_ATOMS(mols):
 			try:
 				spiro += Chem.rdMolDescriptors.CalcNumSpiroAtoms(mol)
 			except:
-				spiro = 0
+				pass
 		spiro_list.append(spiro)
 	return spiro_list
 
@@ -613,7 +613,7 @@ def WIENER_INDEX(mols):
 					for j in range(i+1,num_atoms):
 						wieneridx += amat[i][j]
 			except:
-				wieneridx = 0
+				pass
 		wieneridx_list.append(wieneridx)
 	return wieneridx_list
 
@@ -625,7 +625,7 @@ def SMILES_3_2(smis):
 			try:
 				smi32 += len(s)**(3/2)
 			except:
-				smi32 = 0
+				pass
 		smi32_list.append(smi32)
 	return smi32_list
 
@@ -640,7 +640,7 @@ def PUBCHEM_XLOGP(mols):
 			try:
 				xlogp += Chem.rdMolDescriptors.CalcCrippenDescriptors(mol)[0]
 			except:
-				xlogp = 0
+				pass
 		xlogp_list.append(xlogp)
 	return xlogp_list
 
@@ -653,7 +653,7 @@ def PUBCHEM_TPSA(mols):
 			try:
 				tpsa += Chem.rdMolDescriptors.CalcTPSA(mol)
 			except:
-				tpsa = 0
+				pass
 		tpsa_list.append(tpsa)
 	return tpsa_list
 
@@ -666,7 +666,7 @@ def PUBCHEM_H_BOND_DONOR_COUNT(mols):
 			try:
 				hbd += Chem.rdMolDescriptors.CalcNumHBD(mol)
 			except:
-				hbd = 0
+				pass
 		hbd_list.append(hbd)
 	return hbd_list
 
@@ -679,7 +679,7 @@ def PUBCHEM_H_BOND_ACCEPTOR_COUNT(mols):
 			try:
 				hba += Chem.rdMolDescriptors.CalcNumHBA(mol)
 			except:
-				hba = 0
+				pass
 		hba_list.append(hba)
 	return hba_list
 
@@ -692,7 +692,7 @@ def PUBCHEM_ROTATABLE_BOND_COUNT(mols):
 			try:
 				rbond += Chem.rdMolDescriptors.CalcNumRotatableBonds(mol,strict=1)
 			except:
-				rbond = 0
+				pass
 		rbond_list.append(rbond)
 	return rbond_list
 
@@ -705,7 +705,7 @@ def PUBCHEM_HEAVY_ATOM_COUNT(mols):
 			try:
 				hac += Chem.Lipinski.HeavyAtomCount(mol)
 			except:
-				hac = 0
+				pass
 		hac_list.append(hac)
 	return hac_list
 
@@ -718,7 +718,7 @@ def PUBCHEM_ATOM_STEREO_COUNT(mols):
 			try:
 				asc += Chem.rdMolDescriptors.CalcNumAtomStereoCenters(mol)
 			except:
-				asc = 0
+				pass
 		asc_list.append(asc)
 	return asc_list
 
@@ -739,7 +739,7 @@ def PUBCHEM_UNDEFINED_ATOM_STEREO_COUNT(mols):
 			try:
 				uasc += Chem.rdMolDescriptors.CalcNumUnspecifiedAtomStereoCenters(mol)
 			except:
-				uasc = 0
+				pass
 		uasc_list.append(uasc)
 	return uasc_list
 
@@ -768,7 +768,7 @@ def KAPPA_SHAPE_INDEX1(mols):
 			try:
 				ksi += ksi1(mol)
 			except:
-				ksi = 0
+				pass
 		ksi_list.append(ksi)
 	return ksi_list
 
@@ -782,7 +782,7 @@ def KAPPA_SHAPE_INDEX2(mols):
 			try:
 				ksi += ksi2(mol)
 			except:
-				ksi = 0
+				pass
 		ksi_list.append(ksi)
 	return ksi_list
 
@@ -796,7 +796,7 @@ def KAPPA_SHAPE_INDEX3(mols):
 			try:
 				ksi += ksi3(mol)
 			except:
-				ksi = 0
+				pass
 		ksi_list.append(ksi)
 	return ksi_list
 
@@ -810,7 +810,7 @@ def MCGOWAN_VOLUME(mols):
 			try:
 				mv_num += mv(mol)
 			except:
-				mv_num = 0
+				pass
 		mv_num_list.append(mv_num)
 	return mv_num_list
 
@@ -824,7 +824,7 @@ def MOE_TYPE_Labute_ASA(mols):
 			try:
 				lasa_num += lasa(mol)
 			except:
-				lasa_num= 0
+				pass
 		lasa_num_list.append(lasa_num)
 	return lasa_num_list
 
@@ -838,7 +838,7 @@ def MOE_TYPE_PEOE_VSA(mols):
 			try:
 				pvsa_val += pvsa(mol)
 			except:
-				pvsa_val = 0
+				pass
 		pvsa_val_list.append(pvsa_val)
 	return pvsa_val_list
 
@@ -852,7 +852,7 @@ def MOE_TYPE_SMR_VSA(mols):
 			try:
 				svsa_val += svsa(mol)
 			except:
-				svsa_val= 0
+				pass
 		svsa_val_list.append(svsa_val)
 	return svsa_val_list
 
@@ -866,7 +866,7 @@ def MOE_TYPE_SLOGP_VSA(mols):
 			try:
 				slpvsa_val += slpvsa(mol)
 			except:
-				slpvsa_val= 0
+				pass
 		slpvsa_val_list.append(slpvsa_val)
 	return slpvsa_val_list
 
@@ -880,7 +880,7 @@ def MOE_TYPE_ESTATE_VSA(mols):
 			try:
 				esvsa_val += esvsa(mol)
 			except:
-				esvsa_val= 0
+				pass
 		esvsa_val_list.append(esvsa_val)
 	return esvsa_val_list
 
@@ -894,7 +894,7 @@ def VDW_VOLUME_ABC(mols):
 			try:
 				vvabc_val += vvabc(mol)
 			except:
-				vvabc_val= 0
+				pass
 		vvabc_val_list.append(vvabc_val)
 	return vvabc_val_list
 
@@ -908,7 +908,7 @@ def ZAGREB_INDEX(mols):
 			try:
 				zi_val += zi(mol)
 			except:
-				zi_val= 0
+				pass
 		zi_val_list.append(zi_val)
 	return zi_val_list
 
@@ -923,7 +923,7 @@ def ZAGREB_INDEX(mols):
 # 			sterics = db.dbstep(mol, commandline=True)
 # 			mol_vol = sterics.occ_vol
 # 		except:
-# 			mol_vol	= 0
+# 			pass
 # 		mol_vol_list.append(mol_vol)
 # 	return mol_vol_list
 
@@ -935,6 +935,6 @@ def ZAGREB_INDEX(mols):
 # 	try:
 #
 # 	except:
-# 		= 0
+# 		pass
 # 	_list.append()
 # return _list
