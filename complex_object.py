@@ -39,6 +39,7 @@ class mol_complex(DataFrame):
         self['IPC'] = get_ipc_score(self.mol_objects)
         self['SAS'] = get_sa_score(self.mol_objects)
         self['SCS'] = get_scscore(self.canonical_smiles)
+        self['SYBA'] = get_sybascore(self.canonical_smiles)
         self['PI'] = get_proudfoot_index(self.mol_objects)
         if twc:
             self['R-TWC'] = get_rucker_twc(self.mol_objects)

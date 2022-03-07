@@ -19,7 +19,8 @@ A collaboration with the Sarpong group
 - rdkit
 - openbabel
 - dbstep
-- mordred
+- mordred 
+- SYBA (conda install -c lich syba)
 
 # to do list
 - compare against human metric
@@ -40,6 +41,7 @@ A collaboration with the Sarpong group
 - Van der Waals Volume Atomic and Bond Contributions (J. Org. Chem. 2003, 68, 7368-7373).
 - Zagreb Index 
 - MOE Type Desciptors (Labute ASA, PEOE VSA, SMR VSA, SLogP VSA)
+- SYBA Score (J. Cheminformatics 2020, 12, 35)
 
 
 # currently broken

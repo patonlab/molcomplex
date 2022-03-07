@@ -14,6 +14,7 @@ import rdkit.Chem.GraphDescriptors as graph
 from openbabel import openbabel
 openbabel.obErrorLog.SetOutputLevel(0)
 from mordred import CPSA, KappaShapeIndex, McGowanVolume, MoeType, VdwVolumeABC, ZagrebIndex
+from syba.syba import SybaClassifier
 import pkg_resources
 
 #import dbstep.Dbstep as db
@@ -112,7 +113,6 @@ def get_sa_score(mols):
 
 # Boettcher Score (J. Chem. Inf. Model. 2016, 56, 3, 462–470)
 def get_boettcher_score(smis):
-	
 	obConversion = openbabel.OBConversion()
 	obConversion.SetInAndOutFormats("smi", "smi")
 	bottch = boettcher.BottchScore("False")
@@ -149,6 +149,24 @@ def get_scscore(smis):
 				pass
 		SC_Scores.append(scscore)
 	return SC_Scores
+
+#  SYBA Score (J. Cheminformatics 2020, 12, 35)
+def get_sybascore(smis):
+	syba = SybaClassifier()
+	syba.fitDefaultScore()
+	SYBA_Scores = []
+	for i, smi in enumerate(smis):
+		sybascore = 0
+		for s in smi.split('.'):
+			try:
+				score = syba.predict(smi)
+				sybascore += score
+			except Exception as E:
+				#print(E)
+				pass
+		SYBA_Scores.append(sybascore)
+	return SYBA_Scores
+
 
 def get_rucker_twc(mols):
 	twc_scores = []

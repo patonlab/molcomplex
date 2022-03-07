@@ -24,7 +24,7 @@ def main():
                         help="Add H atoms to all structures before computing complexity score")
     parser.add_argument("--csv", dest="csv", action="store_true", default=False,
                         help="Export data to .CSV formatted file")
-    parser.add_argument("--file", dest="file", default=[],
+    parser.add_argument("-f","--file", dest="file", default=[],
                         help="Input file for calculations of descriptors",nargs='*')
     parser.add_argument("--twc", dest="twc", action="store_true", default=False,
                         help="Rucker's total walk count")
@@ -63,9 +63,9 @@ def main():
     print("Num Descriptors: ",len(MOL_DATA.columns) - 1)
     print("Total Time: ",total_time)
 
-    filenames = [file.split('.')[0] for file in files]
+    filename = '_'.join([file.split('.')[0] for file in files])
     if options.csv:
-        MOL_DATA.to_csv(f"molcomplex_{filenames}.csv",index=False)
+        MOL_DATA.to_csv(f"molcomplex_{filename}.csv",index=False)
 
 if __name__ == "__main__":
     main()
