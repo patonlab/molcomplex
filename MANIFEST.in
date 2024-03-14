@@ -1,0 +1,7 @@
+include molcomplex/*.py
+include molcomplex/metrics/*
+include molcomplex/models/example_model/*
+include molcomplex/models/full_reaxys_model_1024bool/*
+include molcomplex/models/full_reaxys_model_1024uint8/*
+include molcomplex/models/full_reaxys_model_2048bool/*
+

@@ -12,9 +12,9 @@
                                                                                                                                                                                                                                                                                   
 Implementing a variety of complementary metrics for molecular complexity and synthetic accessibility.
 
-A collaboration with the Sarpong group
+A collaboration with the Sarpong group to understand complexity of molecules
 
--- requirements
+# Requirements
 - numpy, pandas
 - rdkit
 - openbabel
@@ -22,11 +22,18 @@ A collaboration with the Sarpong group
 - mordred 
 - SYBA (conda install -c lich syba)
 
-# to do list
-- compare against human metric
-- comment out descriptors that are highly correlated (say > 0.9)
+## Recommended installation and update guide  
+In a nutshell, `molcomplex` and its dependencies are installed/updated as follows:  
+1. Install using conda-forge: `conda install -c conda-forge molcomplex`  
+2. Update to the latest version: `pip install molcomplex --upgrade` 
 
-# metrics implemented
+# Usage
+The `molcomplex` package can be utilised as follows to obtain a csv with complexity scores.
+
+``python -m molcomplex --file examples/structures.txt --csv``
+
+
+# Metrics implemented
 - Bertz Complexity (CT) Score (JACS 1981, 103, 3241-3243)
 - Balaban J Score (Chem. Phys. Lett. 1982, 89, 399-404)
 - Coley SCScore (J. Chem. Inf. Model. 2018, 58, 2, 252)
@@ -42,12 +49,16 @@ A collaboration with the Sarpong group
 - Zagreb Index 
 - MOE Type Desciptors (Labute ASA, PEOE VSA, SMR VSA, SLogP VSA)
 - SYBA Score (J. Cheminformatics 2020, 12, 35)
+- Multiple additional 2D metrics.
 
+# To do list
+- compare against human metric
+- comment out descriptors that are highly correlated (say > 0.9)
 
-# currently broken
+# Currently broken
 - Kier's alpha-modified shape indices
 
-# metrics to implement:
+# Metrics to implement:
 
 - Bertz’s Ns and Nt index: Bertz, S. H. & Sommer, T. J. Rigorous mathematical approaches to strategic bonds and synthetic analysis based on conceptually simple new complexity indices. Chem. Commun. 16, 2409–2410 (1997).
 
