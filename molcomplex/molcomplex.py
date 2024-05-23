@@ -28,6 +28,9 @@ def main():
                         help="Input file for calculations of descriptors",nargs='*')
     parser.add_argument("--twc", dest="twc", action="store_true", default=False,
                         help="Rucker's total walk count")
+    parser.add_argument("--linked", dest="linked", action="store_true", default=False,
+                        help="Linked molecules in the list with the first molecule being the target and the \
+                              list of molecules after being the possible disconnections")
 
     # Parse Arguments
     (options, args) = parser.parse_known_args()
@@ -53,7 +56,7 @@ def main():
                 smi = toks[0]
                 mol_smiles.append(smi)
 
-    MOL_DATA = mol_complex(mol_smiles,options.twc)
+    MOL_DATA = mol_complex(mol_smiles, options.twc, options.linked)
 
     total_time = time.time() - start
 

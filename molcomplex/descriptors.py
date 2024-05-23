@@ -8,9 +8,11 @@
 import os
 import numpy as np
 
+import networkx as nx
 from rdkit import Chem
 from rdkit.Chem.AtomPairs import Pairs,Torsions
 import rdkit.Chem.GraphDescriptors as graph
+from rdkit.Chem import Descriptors
 from openbabel import openbabel
 openbabel.obErrorLog.SetOutputLevel(0)
 from mordred import CPSA, KappaShapeIndex, McGowanVolume, MoeType, VdwVolumeABC, ZagrebIndex
@@ -63,6 +65,22 @@ def get_balaban_score(mols):
 
 		balaban_scores.append(score)
 	return balaban_scores
+
+# Spatial score based on https://doi.org/10.1021/acs.jmedchem.3c00689.
+def get_spatial_score(mols):
+	spatial_score = []
+	for i, mol in enumerate(mols):
+		score = 0
+		smi = Chem.MolToSmiles(mol)
+		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+			try:
+				score += Descriptors.SPS(mol)
+			except:
+				pass
+
+		spatial_score.append(score)
+	return spatial_score
+
 
 # Kier's alpha-modified shape indices
 def get_hallkieralpha_score(mols):
@@ -193,6 +211,30 @@ def get_proudfoot_index(mols):
 				pass
 		pi_scores.append(score)
 	return pi_scores
+
+def get_graph(mol):
+	Chem.Kekulize(mol)
+	atoms = [atom.GetAtomicNum() for atom in mol.GetAtoms()]
+	am = Chem.GetAdjacencyMatrix(mol, useBO=True)
+	for i,atom in enumerate(atoms):
+		am[i,i] = atom
+	G = nx.from_numpy_array(am)
+	return G
+
+def get_graph_edit_distance(mols):
+	graph_edit_distance = []
+	graph_edit_distance.append(0)
+	graph_base = get_graph(mols[0])
+	for i in range(1, len(mols)):
+		score = 0
+		try:
+			graph = get_graph(mols[i])
+			score = nx.graph_edit_distance(graph_base, graph)
+			print(score)
+		except:
+			pass
+		graph_edit_distance.append(score)
+	return graph_edit_distance
 
 ''' Taken from Merck Paper descriptors '''
 
