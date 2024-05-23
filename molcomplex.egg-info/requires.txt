@@ -1,4 +1,0 @@
-PyYAML
-pandas>=2.0.2
-numpy
-mordred
