@@ -239,7 +239,6 @@ def results(n_clicks, smiles, score, nbonds, sortby, mols_per_row):
     mols, smi_list, highlight_bonds  = parse_contents(smiles,int(nbonds))
    
     df = mol_complex(smi_list, twc=False, linked=True)
-    print(df)
     df['highlight_bonds'] = highlight_bonds
 
     if sortby == 'Decreasing complexity':

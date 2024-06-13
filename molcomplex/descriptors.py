@@ -28,12 +28,14 @@ try:
 	from molcomplex.metrics import standalone_model_numpy
 	from molcomplex.metrics import proudfoot
 	from molcomplex.metrics import rucker_twc
+	from molcomplex.metrics import sps_score
 except:
 	from metrics import sa_score
 	from metrics import boettcher
 	from metrics import standalone_model_numpy
 	from metrics import proudfoot
 	from metrics import rucker_twc
+	from metrics import sps_score
 
 
 # Bertz Complexity Score (JACS 1981, 103, 3241-3243)
@@ -67,14 +69,15 @@ def get_balaban_score(mols):
 	return balaban_scores
 
 # Spatial score based on https://doi.org/10.1021/acs.jmedchem.3c00689.
-def get_spatial_score(mols):
+def get_spatial_score(smis):
 	spatial_score = []
-	for i, mol in enumerate(mols):
+	for i, smi in enumerate(smis):
 		score = 0
-		smi = Chem.MolToSmiles(mol)
-		for mol in [Chem.MolFromSmiles(s) for s in smi.split('.')]:
+		for s in smi.split('.'):
 			try:
-				score += Descriptors.SPS(mol)
+				print('ferere')
+				score = sps_score.calculate_score_from_smiles(s)
+				print(score)
 			except:
 				pass
 
