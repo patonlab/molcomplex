@@ -1,4 +1,8 @@
 from setuptools import setup, find_packages
+
+with open('requirements.txt') as f:
+    required = f.read().splitlines()
+
 version = "1.1.0"
 setup(
     name="molcomplex",
@@ -25,12 +29,7 @@ setup(
     ],
     url="https://github.com/bobbypaton/molcomplex",
     download_url=f"https://github.com/bobbypaton/molcomplex/archive/refs/tags/{version}.tar.gz",
-    install_requires=[
-        "PyYAML",
-        "pandas>=2.0.2",
-        "numpy",
-        "mordred",
-    ],
+    install_requires=required,
     python_requires=">=3.0",
     include_package_data=True,
 )
