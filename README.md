@@ -18,19 +18,47 @@ A collaboration with the Sarpong group to understand complexity of molecules
 - numpy, pandas
 - rdkit
 - openbabel
-- dbstep
 - mordred 
 - SYBA (conda install -c lich syba)
 
-## Recommended installation and update guide  
+## Set up conda environment directly using the yml file:
+To install the required packages through Conda, use the env.yml file as follows and the activate the environment: 
+1. `conda env create -f env.yml`
+2. `conda activate mc`
+This will set up the environment with molcomplex installed.
+
+## For installation by cloning the GitHub folder, perform the follwoing steps:
+1. Download the zipped folder or clone using: `git clone https://github.com/patonlab/molcomplex.git`  
+2. Navigate to the installed folder and run: `python setup.py install`. This will install `molcomplex` in the environment you are present in. 
+3. Install necessary dependencies using the following: `conda install -c lich syba`, `conda install -c conda-forge rdkit`, and `conda install -c conda-forge openbabel`
+
+## Recommended installation and update guide (under works)
 In a nutshell, `molcomplex` and its dependencies are installed/updated as follows:  
 1. Install using conda-forge: `conda install -c conda-forge molcomplex`  
 2. Update to the latest version: `pip install molcomplex --upgrade` 
 
-# Usage
+## Usage
+To display the options type:
+
+``python -m molcomplex -h``
+
 The `molcomplex` package can be utilised as follows to obtain a csv with complexity scores.
 
-``python -m molcomplex --file examples/structures.txt --csv``
+``python -m molcomplex -f examples/test.txt``
+
+To write to CSV add in the following:
+
+``python -m molcomplex -f examples/test.txt --csv``
+
+To perform a retro analysis by breaking down bonds to get complexity scores for precursors of the input SMILES add the following option:
+
+``python -m molcomplex -f examples/test.txt --csv --retro``
+
+## Usage APP
+To run the web app perform the following steps:
+1. Navigate to the webapp folder: `cd mcwebapp`
+2. Run the app as follows: `python molcomplexapp.py`
+3. copy paste the `http://127.0.0.1:8050/` or similar into web browser to utilise as an app.
 
 
 # Metrics implemented
@@ -63,7 +91,6 @@ The `molcomplex` package can be utilised as follows to obtain a csv with complex
 - Bertz’s Ns and Nt index: Bertz, S. H. & Sommer, T. J. Rigorous mathematical approaches to strategic bonds and synthetic analysis based on conceptually simple new complexity indices. Chem. Commun. 16, 2409–2410 (1997).
 
 - Randić's zeta index: Randić, M. & Plavšić, D. Characterization of molecular complexity. Int. J. Quantum Chem. 91, 20–31 (2002).
-
 
 - https://www.nature.com/articles/s41598-018-37253-8
 
