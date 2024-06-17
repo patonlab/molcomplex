@@ -75,9 +75,7 @@ def get_spatial_score(smis):
 		score = 0
 		for s in smi.split('.'):
 			try:
-				print('ferere')
-				score = sps_score.calculate_score_from_smiles(s)
-				print(score)
+				score += sps_score.calculate_score_from_smiles(s)
 			except:
 				pass
 

@@ -20,7 +20,7 @@ from complex_funcs import *
 import plotly.graph_objs as go
 
 from molcomplex.complex_object import mol_complex
-a = mol_complex(['C'], twc=False, linked=True)
+a = mol_complex(['C'], twc=False)
 deslist = a.columns.values[2:]
 
 #initialize app
@@ -199,7 +199,7 @@ def update_img(smiles,feature):
             #print error message - invalid smiles
             return None
         
-    df = mol_complex([smiles],  twc=False, linked=True)
+    df = mol_complex([smiles],  twc=False)
 
     feature_value = df[feature].values[0]
     #try:
@@ -238,7 +238,7 @@ def results(n_clicks, smiles, score, nbonds, sortby, mols_per_row):
 
     mols, smi_list, highlight_bonds  = parse_contents(smiles,int(nbonds))
    
-    df = mol_complex(smi_list, twc=False, linked=True)
+    df = mol_complex(smi_list, twc=False)
     df['highlight_bonds'] = highlight_bonds
 
     if sortby == 'Decreasing complexity':
@@ -254,7 +254,7 @@ def results(n_clicks, smiles, score, nbonds, sortby, mols_per_row):
     svg = svg.replace("rect style='opacity:1.0","rect style='opacity:0.0")
 
     sorted = sorted.drop('highlight_bonds',axis=1)
-    input_df = mol_complex([smiles], twc=False, linked=True)
+    input_df = mol_complex([smiles], twc=False)
     output = pd.concat([input_df,sorted])
     
 

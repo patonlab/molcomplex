@@ -11,14 +11,13 @@ warnings.simplefilter(action='ignore', category=UserWarning) #ignore pandas User
 
 class mol_complex(DataFrame):
     #definition of mol_complex objects
-    def __init__(self,mol_smiles, twc=False, linked=False):
+    def __init__(self,mol_smiles, twc=False):
         if isinstance(mol_smiles, (DataFrame, pd.core.internals.BlockManager) ):
             super(mol_complex, self).__init__(mol_smiles)
         else:
             super(mol_complex,self).__init__(mol_smiles, columns=["SMILES"])
 
         self.twc=twc
-        self.linked=linked
         mol_smiles = list(mol_smiles)
 
         #general names for molecule
@@ -102,6 +101,3 @@ class mol_complex(DataFrame):
         self['MOE_TYPE_ESTATE_VSA'] = MOE_TYPE_ESTATE_VSA(self.mol_objects)
         self['VDW_VOLUME_ABC'] = VDW_VOLUME_ABC(self.mol_objects)
         self['ZAGREB_INDEX'] = ZAGREB_INDEX(self.mol_objects)
-
-        if self.linked:
-            self['GRAPH_EDIT_DISTANCE'] = get_graph_edit_distance(self.mol_objects)
