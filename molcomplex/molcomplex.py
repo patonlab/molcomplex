@@ -15,6 +15,7 @@ import os, time
 
 from molcomplex.descriptors import *
 from molcomplex.complex_object import *
+from molcomplex.complex_funcs import *
 
 def main():
     start = time.time()
@@ -26,11 +27,14 @@ def main():
                         help="Export data to .CSV formatted file")
     parser.add_argument("-f","--file", dest="file", default=[],
                         help="Input file for calculations of descriptors",nargs='*')
+    parser.add_argument("-o","--output", dest="output", default='output',
+                        help="Output filename for calculations of descriptors to be stored in CSV")
     parser.add_argument("--twc", dest="twc", action="store_true", default=False,
                         help="Rucker's total walk count")
-    parser.add_argument("--linked", dest="linked", action="store_true", default=False,
-                        help="Linked molecules in the list with the first molecule being the target and the \
-                              list of molecules after being the possible disconnections")
+    parser.add_argument("--retro", dest="retro", action="store_true", default=False,
+                        help="Perform retrosynthesis on the list of molecules provided")
+    parser.add_argument("--nbonds", dest="nbonds", action="store", default=1,
+                        help="Number of bonds to break in retrosynthesis disconnections")
 
     # Parse Arguments
     (options, args) = parser.parse_known_args()
@@ -55,8 +59,14 @@ def main():
             if len(toks) != 0:
                 smi = toks[0]
                 mol_smiles.append(smi)
+    
+    if options.retro:
+        df = parse_contents(mol_smiles, options.nbonds)
+        mol_smiles = df.SMILES
 
-    MOL_DATA = mol_complex(mol_smiles, options.twc, options.linked)
+    MOL_DATA = mol_complex(mol_smiles, options.twc)
+    if options.retro:
+        MOL_DATA = MOL_DATA.merge(df, on=['SMILES'])
 
     total_time = time.time() - start
 
@@ -66,9 +76,8 @@ def main():
     print("Num Descriptors: ",len(MOL_DATA.columns) - 1)
     print("Total Time: ",total_time)
 
-    filename = '_'.join([file.split('.')[0] for file in files])
     if options.csv:
-        MOL_DATA.to_csv(f"molcomplex_{filename}.csv",index=False)
+        MOL_DATA.to_csv(f"molcomplex_{options.output}.csv",index=False)
 
 if __name__ == "__main__":
     main()
