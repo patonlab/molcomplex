@@ -28,7 +28,7 @@ setup(
         "automation",
     ],
     url="https://github.com/bobbypaton/molcomplex",
-    download_url=f"https://github.com/bobbypaton/molcomplex/archive/refs/tags/{version}.tar.gz",
+    download_url=f"https://github.com/patonlab/molcomplex/archive/refs/tags/v1.0.0.tar.gz",
     install_requires=required,
     python_requires=">=3.0",
     include_package_data=True,
