@@ -5,7 +5,7 @@ molcomplex offers the following support channels:
 - For detailed questions (e.g., those requiring examples) send us an
   [email](mailto:patonlab@colostate.edu?subject=[molcomplex])
 - To report issues, use this repository's
-  [issue tracker](https://github.com/bobbypaton/molcomplex/issues/new)
+  [issue tracker](https://github.com/patonlab/molcomplex/issues/new)
 - You can also find us on [![Twitter][1.2]][1]
 
 When reporting an issue, please include the following details:
