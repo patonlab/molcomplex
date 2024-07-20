@@ -1,6 +1,7 @@
 *.pyc
 .cache/
 .DS_Store
+.pypirc
 dist/
 build/
 molcomplex.egg-info
