@@ -54,7 +54,7 @@ setup(
         'openpyxl==3.1.2',
         'pandas==2.2.2',
         'pillow==10.3.0',
-        'pycairo==1.23.0',
+        #'pycairo==1.23.0',
         'pysocks==1.7.1',
         'python-dateutil==2.9.0.post0',
         'pytz==2024.1',
