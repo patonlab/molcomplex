@@ -11,7 +11,7 @@ greenlet==3.0.3
 kiwisolver==1.4.5
 markupsafe==2.1.5
 matplotlib==3.5.3
-molcomplex==1.1.0
+molcomplex==1.0.0
 mordred==1.2.0
 networkx==2.8.8
 numpy==1.26.4

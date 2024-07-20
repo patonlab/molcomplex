@@ -1,9 +1,16 @@
+from os import path
+import io
 from setuptools import setup, find_packages
 
-with open('requirements.txt') as f:
+# read the contents of your README file
+this_directory = path.abspath(path.dirname(__file__))
+with io.open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
+
+with io.open(path.join(this_directory, 'molcomplex', 'requirements.txt'), encoding='utf-8') as f:
     required = f.read().splitlines()
 
-version = "1.1.0"
+version = "1.0.1"
 setup(
     name="molcomplex",
     packages=find_packages(),
@@ -15,7 +22,7 @@ setup(
     version=version,
     license="MIT",
     description="Molecular Complexity Calculations",
-    long_description="Documentation in Read The Docs: XXX",
+    long_description=long_description,
     long_description_content_type="text/markdown",
     author="Guilian Luchini, Shree Sowndarya S. V.",
     author_email="guilian.luchini@colostate.edu, svss@colostate.edu",
@@ -28,7 +35,7 @@ setup(
         "automation",
     ],
     url="https://github.com/patonlab/molcomplex",
-    download_url=f"https://github.com/patonlab/molcomplex/archive/refs/tags/v1.0.0.tar.gz",
+    download_url=f"https://github.com/patonlab/molcomplex/archive/refs/tags/v1.0.1.tar.gz",
     install_requires=required,
     python_requires=">=3.0",
     include_package_data=True,
