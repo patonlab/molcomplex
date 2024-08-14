@@ -32,10 +32,13 @@ This will set up the environment with molcomplex installed.
 2. Navigate to the installed folder and run: `python setup.py install`. This will install `molcomplex` in the environment you are present in. 
 3. Install necessary dependencies using the following: `conda install -c lich syba`, `conda install -c conda-forge rdkit`, and `conda install -c conda-forge openbabel`
 
-## Recommended installation and update guide (under works)
+## Recommended installation and update guide
 In a nutshell, `molcomplex` and its dependencies are installed/updated as follows:  
-1. Install using conda-forge: `conda install -c conda-forge molcomplex`  
-2. Update to the latest version: `pip install molcomplex --upgrade` 
+
+`pip install molcomplex
+conda install -c conda-forge openbabel rdkit Mordred
+conda install lich::syba
+conda install numpy pandas`
 
 ## Usage
 To display the options type:
