@@ -35,10 +35,13 @@ This will set up the environment with molcomplex installed.
 ## Recommended installation and update guide
 In a nutshell, `molcomplex` and its dependencies are installed/updated as follows:  
 
-`pip install molcomplex
-conda install -c conda-forge openbabel rdkit Mordred
-conda install lich::syba
-conda install numpy pandas`
+`pip install molcomplex`
+
+`conda install -c conda-forge openbabel rdkit Mordred`
+
+`conda install lich::syba`
+
+`conda install numpy pandas`
 
 ## Usage
 To display the options type:
