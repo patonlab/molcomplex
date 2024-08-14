@@ -1,4 +1,4 @@
-          ___           ___                         ___           ___           ___           ___                       ___           ___      
+![image](https://github.com/user-attachments/assets/b5337336-291c-40b8-aeb7-72391a6ff0f3)          ___           ___                         ___           ___           ___           ___                       ___           ___      
          /\  \         /\  \                       /\__\         /\  \         /\  \         /\  \                     /\__\         /|  |     
         |::\  \       /::\  \                     /:/  /        /::\  \       |::\  \       /::\  \                   /:/ _/_       |:|  |     
         |:|:\  \     /:/\:\  \                   /:/  /        /:/\:\  \      |:|:\  \     /:/\:\__\                 /:/ /\__\      |:|  |     
@@ -79,12 +79,6 @@ To run the web app perform the following steps:
 - SYBA Score (J. Cheminformatics 2020, 12, 35)
 - Multiple additional 2D metrics.
 
-# To do list
-- compare against human metric
-- comment out descriptors that are highly correlated (say > 0.9)
-
-# Currently broken
-- Kier's alpha-modified shape indices
 
 # Metrics to implement:
 
@@ -98,3 +92,13 @@ Two noteworthy substructure-based methods are:
 - Barone, R. & Chanon, M. A new and simple approach to chemical complexity. Application to the synthesis of natural products. J. Chem. Inf. Comput. Sci. 41, 269–272 (2001).
 
 - Whitlock, H. W. On the structure of total synthesis of complex natural products. J. Org. Chem. 63, 7982–7989 (1998).
+
+
+# Citation:
+
+Molecular Complexity-Inspired Synthetic Strategies Toward the Calyciphylline A-type Daphniphyllum Alkaloids Himalensine A and Daphenylline. Wright, B. A.; Okada, T.; Regni, A.; Luchini, G.; Sowndarya, S. V. S.; Chaisan, N.; Kölbl, S.; Kim, S. F.; Paton, R. S.; Sarpong, R. S. _submmitted_ **2024**
+
+# Acknowledgment:
+
+This material is based upon work supported by the U.S. National Science Foundation under the NSF Center for Computer Assisted Synthesis (C-CAS), grant number CHE–2202693.
+
